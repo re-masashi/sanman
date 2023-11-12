@@ -1,0 +1,21 @@
+{
+  "name": "Sanman, the liberated music app",
+  "short_name": "Sanman",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "S.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    },
+    {
+      "src": "S.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    }
+  ],
+  "theme_color": "#ff0000",
+  "display": "standalone",
+  "background_color": "#000000"
+}

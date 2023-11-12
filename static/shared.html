@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sanman</title>
+    <link rel="stylesheet" type="text/css" href="/static/tailwind.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <nav class="bg-black" id="navbar">
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <div class="flex items-center">
+          <a
+            href="/"
+            class="self-center text-2xl font-extrabold whitespace-nowrap dark:text-white"
+            >Sanman</a
+          >
+        </div>
+        <div class="flex md:order-2">
+          <button
+            class="md:hidden hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-800 rounded-lg text-sm p-2.5 mr-1"
+          >
+            <i class="text-red-700 material-icons" onclick="search()">search</i>
+            <span class="sr-only">Search</span>
+          </button>
+          <div class="relative hidden md:block">
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
+              <span class="sr-only">Search icon</span>
+            </div>
+            <button class="px-4 text-red-400" onclick="search()">
+              <i class="material-icons">search</i>
+            </button>
+          </div>
+          <button
+            data-collapse-toggle="navbar-search"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden hover:bg-gray-950 focus:outline-none focus:ring-2 focus:ring-gray-800"
+            aria-controls="navbar-search"
+            aria-expanded="false"
+            onclick="document.getElementById('navbar-search').classList.toggle('hidden')"
+          >
+            <span class="sr-only">Open main menu</span>
+            <i class="text-red-700 material-icons">menu</i>
+          </button>
+        </div>
+        <div
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-search">
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium borderrounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0"
+          >
+            <li>
+              <a
+                href="/playlists"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                >Playlists</a
+              >
+            </li>
+            <li>
+              <a
+                href="/favourites"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                >Favourites</a
+              >
+            </li>
+            <li>
+              <a
+                href="/history"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                >History</a
+              >
+            </li>
+            <li>
+              <a
+                href="/login"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                >Login</a
+              >
+            </li>
+            <li>
+              <a
+                href="/logout"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="h-full" >
+      <div class="w-full" id="approot">
+        <div
+          class="flex items-center justify-center h-screen bg-black"
+          style="box-shadow: inset 0 30px 100px 20px darkred"
+        >
+          <div
+            class="bg-black shadow-xl shadow-red-800 rounded-lg"
+            style="width: 45rem !important"
+          >
+            <img
+              id="albumcovermob"
+              class="p-6 w-[300px] h-[300px]"
+              src=""
+              alt="Album Pic"
+              style="
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+              "
+            />
+            <div class="flex">
+              <div>
+                <img
+                  id="albumcover"
+                  class="w-full hidden md:block w-[500px] h-[500px]"
+                  src=""
+                  alt="Album Pic"
+                />
+              </div>
+              <div class="w-full p-8">
+                <div class="flex justify-between">
+                  <div>
+                    <h3
+                      id="songname"
+                      class="text-2xl text-gray-300 font-medium"
+                    >
+                      
+                    </h3>
+                    <p id="artists" class="text-sm text-gray-400 mt-1">
+                      
+                    </p>
+                  </div>
+                  <button class="text-red-400">
+                    <i class="material-icons" onclick="downloadSong();">download</i>
+                  </button>
+                </div>
+                <div class="flex justify-between items-center mt-8">
+                  <button class="text-gray-400" id="sharebtn">
+                    <i class="material-icons">share</i>
+                  </button>
+                  <button id="prev" class="text-gray-400" onclick="queuePrev();">
+                    <i class="material-icons">skip_previous</i>
+                  </button>
+                  <button
+                    id="playbutton"
+                    onclick="play()"
+                    class="text-white p-8 rounded-full bg-red-500"
+                  >
+                    <i class="material-icons">play_arrow</i>
+                  </button>
+                  <button id="next" class="text-gray-400" onclick="queueNext();">
+                    <i class="material-icons">skip_next</i>
+                  </button>
+                  <button class="text-gray-400">
+                    <i class="material-icons">repeat</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="progress" class="mx-8 py-4">
+              <div class="flex justify-between text-sm text-gray-200">
+                <p id="timeplayed">0:00</p>
+                <p id="duration">4:20</p>
+              </div>
+              <div class="mt-1" style="width: 100%">
+                <div class="h-1 bg-gray-800 rounded-full">
+                  <div
+                    id="scrollpercent"
+                    class="h-1 bg-red-400 rounded-full relative"
+                    style="width: 0%"
+                  >
+                    <span
+                      class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-red-600 left-full"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="/static/activity.js"></script>
+  <script type="text/javascript" src="/static/navigation.js"></script>
+  <script type="text/javascript" src="/static/share.js"></script>
+</html>

@@ -1,5 +1,5 @@
 <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-#for $song in $results
+#for $song in $songresults
 <li class="py-3 sm:py-4">
     <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
@@ -15,10 +15,63 @@
                 $song['primaryArtists']
             </p>
         </div>
-        <button onclick='loadSong("$song.id")' class="inline-flex items-center text-base font-semibold text-white">
+        <button onclick='queue.queue=[]; loadSong("$song.id");
+setQueueState();
+document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
             <i class="material-icons">play_arrow</i>
         </button>
     </div>
 </li>
+#end for
+<h3 class="text-md text-center text-white">Playlists</h3>
+#for $playlist in $playlistresults
+#if $playlist
+<li class="py-3 sm:py-4">
+    <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+            <img 
+                class="w-8 h-8 rounded-full" 
+                src="$playlist['image'][0].link">
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                $playlist['name']
+            </p>
+            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                $playlist['firstname'], $playlist['lastname']
+            </p>
+        </div>
+        <button onclick='playPlaylist("$playlist.id"); 
+document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
+            <i class="material-icons">play_arrow</i>
+        </button>
+    </div>
+</li>
+#end if
+#end for
+<h3 class="text-md text-center text-white">Albums</h3>
+#for $playlist in $albumresults
+#if $playlist
+<li class="py-3 sm:py-4">
+    <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+            <img 
+                class="w-8 h-8 rounded-full" 
+                src="$playlist['image'][0].link">
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                $playlist['name']
+            </p>
+            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                $playlist['primaryArtists'][0]
+            </p>
+        </div>
+        <button onclick='playAlbum("$playlist.id"); document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
+            <i class="material-icons">play_arrow</i>
+        </button>
+    </div>
+</li>
+#end if
 #end for
 </ul>
