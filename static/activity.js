@@ -1,7 +1,7 @@
 let playing = false;
 
 let currentImage = localStorage.getItem("currentImage");
-let currentID = localStorage.getItem("currentID");
+let currentID = localStorage.getItem("currentID")||"c1IjvQEH";
 let currentAudio = localStorage.getItem("currentAudio");
 let currentArtists = localStorage.getItem("currentArtists");
 let currentSongname = localStorage.getItem("currentSongname");
@@ -11,14 +11,14 @@ let currentQueuePrev = localStorage.getItem("currentQueuePrev");
 let currentQueueNext = localStorage.getItem("currentQueueNext");
 let currentQueue = localStorage.getItem('currentQueue');
 let currentQueueIndex = parseInt(localStorage.getItem('currentQueueIndex')||0);
-
-if (window.screen.width<=640){ // smol
-	document.getElementById('albumcover').remove();
-	document.getElementById('albumcovermob').id = 'albumcover';
-}else{
-	document.getElementById('albumcovermob').remove();
-}
-
+let currentQueueID = localStorage.getItem('currentQueueID')||'s:'+currentID;
+/*
+	'a:<albumid>'
+	or
+	'p:<playlistid>'
+	or
+	's:<singleid>'
+*/
 
 let mediaSessionInit = ()=>{
   if ("mediaSession" in navigator) {
@@ -36,7 +36,7 @@ let mediaSessionInit = ()=>{
     });
     navigator.mediaSession.setActionHandler("play", () => {
       queue.current.play();
-      document.querySelector('#playbutton').innerHTML = `<i class="material-icons">pause</i>`;
+      document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
       playing=true;
     });
     navigator.mediaSession.setActionHandler("pause", () => {
@@ -103,11 +103,7 @@ document.getElementById('songname').innerHTML = currentSongname;
 document.getElementById('albumcover').src = currentImage;
 document.title = currentTitle;
 
-if (localStorage.getItem('currentID')===null) {
-	loadSong('c1IjvQEH');
-}
-
-document.getElementById('progress').addEventListener('click', setProgress);
+loadSong(currentID)
 
 let queueNext = (e)=>{
   playing = false;
@@ -151,22 +147,16 @@ let queuePrev = (e)=>{
 	loadSong(queue.queue[currentQueueIndex]);
 }
 
-
-queue.current.addEventListener('ended',	queueNext );
-
 function play() {
 	if (playing) {
 		queue.current.pause();
 		document.querySelector('#playbutton').innerHTML = `<i class="material-icons">play_arrow</i>`;
 	}else{
 		queue.current.play();
-		document.querySelector('#playbutton').innerHTML = `<i class="material-icons">pause</i>`;
+		document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
 	}
 	playing = !playing;
 }
-
-document.getElementById('progress').addEventListener('click', setProgress);
-queue.current.addEventListener('timeupdate', updateProgress);
 
 mediaSessionInit();
 
@@ -244,7 +234,7 @@ function loadSong(id) {
 
 	  	queue.current.play();
 	  	queue.current.addEventListener('timeupdate', updateProgress);
-	  	document.querySelector('#playbutton').innerHTML = "<i class='material-icons'>pause</i>";
+	  	document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
 	  	playing = true;
 	  	
       currentTitle = resp.name + " by " + resp.primaryArtists + " | Sanman";
@@ -344,16 +334,16 @@ let search = () =>{
 	      <div class="m-8 my-20 max-w-[400px] mx-auto">
 	        <div class="mb-8">
 	          <h1 class="mb-4 text-white text-3xl font-extrabold">Search</h1>
-	          <p class="text-gray-300">Name of your song please</p>
+	          <p class="text-gray-300">Search a song or album or playlist</p>
 	        </div>
 	        <div class="space-y-4">
 	        	<input 
 	        		id="query" 
 	        		type='text' 
-	        		class="bg-gray-900 appearance-none rounded w-full py-2 px-4 text-red-100 leading-tight focus:outline-none focus:bg-gray-950 focus:border-red-800 focus:border-2"
+	        		class="bg-gray-900 appearance-none rounded w-full py-2 px-4 text-red-100 leading-tight focus:outline-none"
 	        		placeholder="Song Name">
 	          <button id="modalbtn2" onclick="results(document.getElementById('query').value);document.getElementById('modal').remove();" class="p-3 bg-white border rounded-full w-full font-semibold">GO!</button>
-	          <button id="modalbtn1" onclick="document.getElementById('modal').remove();" class="p-3 bg-red-800 rounded-full text-white w-full font-bold">Cancel</button>
+	          <button id="modalbtn1" onclick="document.getElementById('modal').remove();" class="p-3 bg-indigo-800 rounded-full text-white w-full font-bold">Cancel</button>
 	        </div>
 	      </div>
 	    </div>
@@ -435,18 +425,19 @@ function downloadSong() {
 
 function setQueueState() {
   localStorage.setItem("currentQueue", JSON.stringify(queue.queue));
+  localStorage.setItem("currentQueueID", currentQueueID);
 }
 
-document.getElementById('sharebtn').addEventListener('click', (e)=>{
-  if (navigator.share === undefined) {
-     window.location.href = "/share/song/?id="+currentID;
-  }
-  navigator.share({
-    title: currentSongname+" by "+currentArtists,
-    text: "Listen to "+currentSongname+" by "+currentArtists+" on Sanman!",
-    url: window.location.origin+"/share/song/?id="+currentID
-  });
-})
+// document.getElementById('sharebtn').addEventListener('click', (e)=>{
+//   if (navigator.share === undefined) {
+//      window.location.href = "/share/song/?id="+currentID;
+//   }
+//   navigator.share({
+//     title: currentSongname+" by "+currentArtists,
+//     text: "Listen to "+currentSongname+" by "+currentArtists+" on Sanman!",
+//     url: window.location.origin+"/share/song/?id="+currentID
+//   });
+// })
 
 if ("serviceWorker" in navigator) {
   // register service worker

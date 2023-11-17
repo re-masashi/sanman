@@ -1,3 +1,4 @@
+<h3 class="text-md text-center text-white">Songs</h3>
 <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
 #for $song in $songresults
 <li class="py-3 sm:py-4">
@@ -15,9 +16,9 @@
                 $song['primaryArtists']
             </p>
         </div>
-        <button onclick='queue.queue=[]; loadSong("$song.id");
+        <button onclick='queue.queue=[]; loadSong("$song.id"); currentQueueID="s:$song.id";
 setQueueState();
-document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
+document.getElementById("modal").remove(); ' class="inline-flex items-center text-base font-semibold text-white">
             <i class="material-icons">play_arrow</i>
         </button>
     </div>
@@ -26,7 +27,7 @@ document.getElementById("modal").remove();' class="inline-flex items-center text
 <h3 class="text-md text-center text-white">Playlists</h3>
 #for $playlist in $playlistresults
 #if $playlist
-<li class="py-3 sm:py-4">
+<li class="py-3 sm:py-4" onclick="navVisit(`/playlist/$playlist['id']`)">
     <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
             <img 
@@ -42,7 +43,9 @@ document.getElementById("modal").remove();' class="inline-flex items-center text
             </p>
         </div>
         <button onclick='playPlaylist("$playlist.id"); 
-document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
+        currentQueueID="p:$playlist.id";
+        setQueueState();
+document.getElementById("modal").remove(); ' class="inline-flex items-center text-base font-semibold text-white">
             <i class="material-icons">play_arrow</i>
         </button>
     </div>
@@ -67,7 +70,7 @@ document.getElementById("modal").remove();' class="inline-flex items-center text
                 $playlist['primaryArtists'][0]
             </p>
         </div>
-        <button onclick='playAlbum("$playlist.id"); document.getElementById("modal").remove();' class="inline-flex items-center text-base font-semibold text-white">
+        <button onclick='playAlbum("$playlist.id"); currentQueueID="a:$playlist.id"; setQueueState(); document.getElementById("modal").remove(); ' class="inline-flex items-center text-base font-semibold text-white">
             <i class="material-icons">play_arrow</i>
         </button>
     </div>

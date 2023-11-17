@@ -162,34 +162,31 @@ async def apisearch(request):
 
 @app.get("/playlists/")
 async def playlist_create(request):
-    # # return response.html(
-    # #     "<h1>feature will soon be available. >_<."
-    # # )
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
         
-    # return response.html(
-    #     env.render("playlist.spf", [{
-    #             "playlist": requests.get(
-    #                 'https://saavn.me/search/songs?query='
-    #                 'X'
-    #                 '&page=1&limit=10'
-    #             ).json()['data']['results']
-    #         }], 
-    #         template_name="search_result"
-    #     )
-    # )
-    # if not is_logged_in(request):
-    #     return response.redirect("/login") # TODO: Flashes...
+    return response.html(
+        env.render("playlist.spf", [{
+                "playlist": requests.get(
+                    'https://saavn.me/search/songs?query='
+                    'X'
+                    '&page=1&limit=10'
+                ).json()['data']['results']
+            }], 
+            template_name="search_result"
+        )
+    )
+    if not is_logged_in(request):
+        return response.redirect("/login") # TODO: Flashes...
 
     return response.html(
         "<h1>feature will soon be available. >_<."
     )
 
 @app.get("/playlists/<playlistid>") # todo: Fetch from user in DB.
-async def playlists_page(request, playlistid):
-    if not is_logged_in(request):
-        return response.redirect("/login") # TODO: Flashes...
+async def playlist_page(request, playlistid):
+    # if not is_logged_in(request):
+    #     return response.redirect("/login") # TODO: Flashes...
     
     data = requests.get(
         'https://saavn.me/playlists?id='+playlistid
@@ -197,15 +194,40 @@ async def playlists_page(request, playlistid):
 
     if data == None:
         return response.text("404")
+
+    print(data)
+
     return response.html(
         env.render("playlist.spf", [{
-                "playlist": data['songs'],
-                "cover": data["image"][0]["link"],
-                "name": data["name"]
+                "playlist": data,
             }], 
-            template_name="search_result"
+            template_name="playlist"
         )
     )
+
+
+@app.get("/albums/<albumid>") # todo: Fetch from user in DB.
+async def album_page(request, albumid):
+    # if not is_logged_in(request):
+    #     return response.redirect("/login") # TODO: Flashes...
+    
+    data = requests.get(
+        'https://saavn.me/albums?id='+albumid
+    ).json()["data"]
+
+    if data == None:
+        return response.text("404")
+
+    print(data)
+
+    return response.html(
+        env.render("album.spf", [{
+                "album": data,
+            }], 
+            template_name="album"
+        )
+    )
+
 
 @app.get("/history")
 async def history(request,):

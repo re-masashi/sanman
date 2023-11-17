@@ -1,0 +1,23 @@
+#lyricer {
+	font-size: 88%;
+  	text-shadow: 0 0 1px #EEEEEE;
+  	color: #666666;
+  	overflow: scroll;
+}
+
+#lyricer ul {
+	list-style-type: none;
+	padding: 5px;
+}
+
+#lyricer ul li {
+	overflow: auto;
+}
+
+#lyricer ul li:hover {
+	color: #428bca;
+}
+
+#lyricer .lyricer-current-line {
+	font-size: 160%;
+}

@@ -1,0 +1,4 @@
+.syncedlyrics/
+__pycache__/
+Spacefile
+venv/
