@@ -51,7 +51,7 @@
                </p>
            </div>
            <p class="text-white text-xs">
-               ${format(int(song['playCount']),',d')} plays
+               $song['playCount'] plays
            </p>
            <button onclick='queue.queue=[]; loadSong("$song.id");
 setQueueState();' class="inline-flex items-center text-base font-semibold text-white">

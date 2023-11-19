@@ -1,19 +1,14 @@
-from sanic import Sanic, response, Request, Websocket
+from sanic import Sanic, response
 import spitfire
 import requests
 from tortoise.contrib.sanic import register_tortoise
 from tortoise.exceptions import DoesNotExist
-from models import Users, VerificationLinks
+from models import Users
 from utils import is_logged_in
-import uuid
 import os
-import dateutil
+import syncedlyrics
 
-from datetime import datetime as dt
-import time, datetime
 import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
-from pprint import pprint
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -36,7 +31,7 @@ app.static('/static', './static')
 @app.get("/")
 async def index(request):
     return await response.file(
-    	"static/index.html"
+        "static/index.html"
     )
 
 @app.get("/signup")
@@ -192,7 +187,7 @@ async def playlist_page(request, playlistid):
         'https://saavn.me/playlists?id='+playlistid
     ).json()["data"]
 
-    if data == None:
+    if data is None:
         return response.text("404")
 
     print(data)
@@ -215,7 +210,7 @@ async def album_page(request, albumid):
         'https://saavn.me/albums?id='+albumid
     ).json()["data"]
 
-    if data == None:
+    if data is None:
         return response.text("404")
 
     print(data)
@@ -228,6 +223,12 @@ async def album_page(request, albumid):
         )
     )
 
+@app.get("/lyrics/song/")
+async def getlyrics(req,):
+  q = req.args.get('q', '')
+  return response.text(
+    syncedlyrics.search(q)
+  )
 
 @app.get("/history")
 async def history(request,):
@@ -254,4 +255,5 @@ async def sharesongs(req,):
   )
 
 if __name__ == '__main__':
-	app.run(host='localhost', port=1337, debug=True, auto_reload=True)
+    app.run(host='0.0.0.0', port=1337, debug=True,
+    auto_reload=False)

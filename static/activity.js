@@ -170,7 +170,9 @@ function setProgress(e) {
   const progressPercent = (queue.current.currentTime / duration) * 100;
   document.getElementById('scrollpercent').style.width = `${progressPercent}%`;
   document.getElementById('timeplayed').innerHTML = Math.floor(queue.current.currentTime/60)+":"+Math.ceil(queue.current.currentTime%60);
-  
+  if (isLyrOpen) {
+    lrc.move(queue.current.currentTime);
+  }
 }
 
 
@@ -255,7 +257,10 @@ function loadSong(id) {
       //   // document.getElementById('progress').addEventListener('click', setProgress);
       //   play();
       // })
-      queue.current.addEventListener('ended', queueNext);    
+      queue.current.addEventListener('ended', queueNext);
+      if (isLyrOpen) {
+      	loadLyrics();
+      }
 	  });
 }
 
@@ -298,6 +303,9 @@ function updateProgress(e) {
     playbackRate: queue.current.playbackRate,
     position: queue.current.currentTime,
   });
+  if (isLyrOpen) {
+    lrc.move(queue.current.currentTime);
+  }
 }
 
 let modal = (title, text, button1, button2, act1, act2) => {
@@ -428,16 +436,18 @@ function setQueueState() {
   localStorage.setItem("currentQueueID", currentQueueID);
 }
 
-// document.getElementById('sharebtn').addEventListener('click', (e)=>{
-//   if (navigator.share === undefined) {
-//      window.location.href = "/share/song/?id="+currentID;
-//   }
-//   navigator.share({
-//     title: currentSongname+" by "+currentArtists,
-//     text: "Listen to "+currentSongname+" by "+currentArtists+" on Sanman!",
-//     url: window.location.origin+"/share/song/?id="+currentID
-//   });
-// })
+let shareSong = ()=>{
+	console.log('share')
+  if (navigator.share === undefined) {
+     window.location.href = "/share/song/?id="+currentID;
+     return;
+  }
+  navigator.share({
+    title: currentSongname+" by "+currentArtists,
+    text: "Listen to "+currentSongname+" by "+currentArtists+" on Sanman!",
+    url: window.location.origin+"/share/song/?id="+currentID
+  });
+}
 
 if ("serviceWorker" in navigator) {
   // register service worker

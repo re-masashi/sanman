@@ -27,8 +27,8 @@
               released in the year $album['year']
             </p>
           </div>
-          <div class="text-fuchsia-700">
-            <i class="material-icons">favorite</i>
+          <div>
+            <button class="material-icons text-fuchsia-700">favorite</button>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@
                </p>
            </div>
            <p class="text-white text-xs">
-               ${format(int(song['playCount']),',d')} plays
+               $song['playCount'] plays
            </p>
            <button onclick='queue.queue=[]; loadSong("$song.id");
 setQueueState();' class="inline-flex items-center text-base font-semibold text-white">

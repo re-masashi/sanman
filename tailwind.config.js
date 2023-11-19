@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./static/activity.js','./static/**/*.html', './templates/**/*.spf' /* ... */],
+  content: ['./static/*.js','./static/**/*.html', './templates/**/*.spf' /* ... */],
   theme: {
       extend: {
         animation: {

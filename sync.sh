@@ -1,5 +1,5 @@
 git clone https://github.com/re-masashi/sanman;
-mv sanman/* ./*
-mv sanman/static/* ./static/*
-mv sanman/templates/* ./templates/*
+cp sanman/* ./
+cp sanman/static/* ./static/
+cp sanman/templates/* ./templates/
 rm -rf sanman/
