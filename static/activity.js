@@ -264,6 +264,11 @@ function loadSong(id) {
       //   // document.getElementById('progress').addEventListener('click', setProgress);
       //   play();
       // })
+      navigator.mediaSession.setPositionState({
+        duration: currentDuration,
+        playbackRate: queue.current.playbackRate,
+        position: queue.current.currentTime,
+      });
       queue.current.addEventListener('ended', queueNext);
       if (isLyrOpen) {
       	loadLyrics();
@@ -305,11 +310,6 @@ function updateProgress(e) {
   const progressPercent = (currentTime / duration) * 100;
   document.getElementById('scrollpercent').style.width = `${progressPercent}%`;
   document.getElementById('timeplayed').innerHTML = Math.floor(currentTime/60)+":"+Math.ceil(currentTime%60);
-  navigator.mediaSession.setPositionState({
-    duration: currentDuration,
-    playbackRate: queue.current.playbackRate,
-    position: queue.current.currentTime,
-  });
   if (isLyrOpen) {
     lrc.move(queue.current.currentTime);
   }
