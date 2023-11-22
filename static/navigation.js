@@ -1,5 +1,6 @@
 let homeData = null;
 let isLyrOpen = false;
+let isDetailsOpen = false;
 
 // const cacheRoutes = ['/albums/*',];
 
@@ -58,13 +59,20 @@ let navVisit=(page)=>{
 }
 
 function loadDetailedPage() {
+  if (isDetailsOpen) {
+    document.getElementById('approot').innerHTML=homeData;
+    isDetailsOpen = false;
+    return;
+  }
   console.log("Loading "+currentQueueID);
   if (currentQueueID[0]==='a') {
     navVisit('/albums/'+currentQueueID.substring(2));
+    isDetailsOpen = true;
     return;
   }
   if (currentQueueIndex[0]==='p') {
     navVisit('/playlists/'+currentQueueID.substring(2));
+    isDetailsOpen = true;
     return;
   }
 }
@@ -85,6 +93,17 @@ let showMoreOptions = () =>{
       <button class="p-2 hover:-translate-y-1 hover:scale-110 duration-300 transition" onclick="shareSong();">
         <i class="material-icons text-fuchsia-500 ">share</i>
       </button>
+    </div>
+  `
+}
+
+let showCoffee = () =>{
+  if (document.getElementById('coffee')!==null) {
+    return;
+  }
+  document.documentElement.innerHTML+=`
+    <div class="font-extrabold bg-gray-900 mr-1 p-4 fixed bottom-0 right-0 mb-24 z-50 rounded-full " id="coffee">
+        <a href="https://www.buymeacoffee.com/remasashi"><i class="material-icons text-fuchsia-700">coffee</i></a>
     </div>
   `
 }

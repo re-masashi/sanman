@@ -20,6 +20,9 @@ let currentQueueID = localStorage.getItem('currentQueueID')||'s:'+currentID;
 	's:<singleid>'
 */
 
+const pauseIcon = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
+const playIcon = `<i class="material-icons">play_arrow</i>`;
+
 let mediaSessionInit = ()=>{
   if ("mediaSession" in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -36,12 +39,12 @@ let mediaSessionInit = ()=>{
     });
     navigator.mediaSession.setActionHandler("play", () => {
       queue.current.play();
-      document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
+      document.querySelector('#playbutton').innerHTML = pauseIcon;
       playing=true;
     });
     navigator.mediaSession.setActionHandler("pause", () => {
       queue.current.pause();
-      document.querySelector('#playbutton').innerHTML = `<i class="material-icons">play_arrow</i>`;
+      document.querySelector('#playbutton').innerHTML = playIcon;
       playing=false;
     });
     navigator.mediaSession.setActionHandler("stop", () => {
@@ -87,7 +90,6 @@ let mediaSessionInit = ()=>{
     //  });
 
   }
-
 }
 
 let queue = {
@@ -149,11 +151,13 @@ let queuePrev = (e)=>{
 
 function play() {
 	if (playing) {
+		document.querySelector('#playbutton').innerHTML = playIcon;
+		console.log("pausing")
 		queue.current.pause();
-		document.querySelector('#playbutton').innerHTML = `<i class="material-icons">play_arrow</i>`;
 	}else{
+		document.querySelector('#playbutton').innerHTML = pauseIcon;
+		console.log("playing")
 		queue.current.play();
-		document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
 	}
 	playing = !playing;
 }
@@ -177,6 +181,9 @@ function setProgress(e) {
 
 
 function loadSong(id) {
+	document.getElementById('songname').innerHTML=`<span class="bg-gray-900 text-transparent animate-pulse">-----</span>`;
+	document.getElementById('artists').innerHTML=`<span class="bg-gray-900 text-transparent animate-pulse">-----</span>`;	
+	document.getElementById('albumcover').src="/static/placeholder.jpg";
 	fetch(`https://saavn.me/songs?id=${id}`)
 	  .then((response) => response.json())
 	  .then((json) => {
@@ -221,22 +228,22 @@ function loadSong(id) {
       queue.current.controls = true;
 
 	  	currentArtists = resp.primaryArtists;
-	  	document.getElementById('artists').innerHTML = currentArtists;
+	  	document.getElementById('artists').innerText = currentArtists;
 	  	localStorage.setItem('currentArtists', currentArtists);
 
 	  	currentSongname = resp.name;
-	  	document.getElementById('songname').innerHTML = currentSongname;
+	  	document.getElementById('songname').innerText = currentSongname;
 	  	localStorage.setItem("currentSongname", currentSongname);
 
       let currentDuration = resp.duration;
-      document.getElementById('duration').innerHTML = Math.floor(currentDuration/60)+":"+Math.floor(currentDuration%60);
+      document.getElementById('duration').innerText = Math.floor(currentDuration/60)+":"+Math.floor(currentDuration%60);
       localStorage.setItem("currentDuration", currentDuration);
 
       mediaSessionInit();
 
 	  	queue.current.play();
 	  	queue.current.addEventListener('timeupdate', updateProgress);
-	  	document.querySelector('#playbutton').innerHTML = `<i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>`;
+	  	document.querySelector('#playbutton').innerHTML = playIcon;
 	  	playing = true;
 	  	
       currentTitle = resp.name + " by " + resp.primaryArtists + " | Sanman";
