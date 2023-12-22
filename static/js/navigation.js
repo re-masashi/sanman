@@ -59,22 +59,6 @@ let navVisit=(page)=>{
 }
 
 function loadDetailedPage() {
-  if (isDetailsOpen) {
-    document.getElementById('approot').innerHTML=homeData;
-    isDetailsOpen = false;
-    return;
-  }
-  console.log("Loading "+currentQueueID);
-  if (currentQueueID[0]==='a') {
-    navVisit('/albums/'+currentQueueID.substring(2));
-    isDetailsOpen = true;
-    return;
-  }
-  if (currentQueueIndex[0]==='p') {
-    navVisit('/playlists/'+currentQueueID.substring(2));
-    isDetailsOpen = true;
-    return;
-  }
 }
 
 let showMoreOptions = () =>{

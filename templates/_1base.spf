@@ -3,16 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="theme-color" content="#ff0000" />
-    <title>Sanman</title>
-    <link rel="stylesheet" type="text/css" href="/static/tailwind.css" />
+    <title>
+    #block title
+        Sanman
+    #end block
+    </title>
+    #block header_links
+    <link rel="stylesheet" type="text/css" href="/static/styles/tailwind.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
+    <link rel="stylesheet" type="text/css" href="/static/styles/lyr.css" />
+    #end block
     <link rel="manifest" href="/static/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      #block scripts
+      <script type="module" async>
+        import * as Turbo from 'https://unpkg.com/@hotwired/turbo@8.0.0-beta.1/dist/turbo.es2017-esm.js';
+      </script>
+      <script type="text/javascript" src="/static/js/state.js"></script>
+      <script type="text/javascript" src="/static/js/main.js" defer></script>
+      <script type="text/javascript" src="/static/js/music_controls.js"></script>
+    <!--   <script type="text/javascript" src="/static/activity.js"></script>
+      <script type="text/javascript" src="/static/navigation.js"></script>
+      <script type="text/javascript" src="/static/lyr.js" defer></script>
+      <script type="text/javascript" src="/static/lyricsloader.js" defer></script> -->
+      #end block
   </head>
   <body class="bg-black pt-14 pb-24">
+    #block navbar
     <nav class="bg-black w-full z-20 top-0 fixed" id="navbar">
       <div
         class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
@@ -21,6 +41,7 @@
           <a
             href="/"
             class="self-center text-2xl font-extrabold whitespace-nowrap text-white"
+            data-turbo-frame="approot"
           >
             <h1
               class="animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent text-3xl font-black text-center"
@@ -30,23 +51,25 @@
           </a>
         </div>
         <div class="flex md:order-2">
-          <button
+          <a
             class="md:hidden hover:bg-gray-950 focus:outline-none focus:ring-4 focus:ring-gray-800 rounded-lg text-sm p-2.5 mr-1"
+            href="/search"
+            data-turbo-frame="approot"
           >
-            <i class="text-fuchsia-700 material-icons" onclick="search()"
+            <i class="text-fuchsia-700 material-icons"
               >search</i
             >
             <span class="sr-only">Search</span>
-          </button>
+          </a>
           <div class="relative hidden md:block">
             <div
               class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
             >
               <span class="sr-only">Search icon</span>
             </div>
-            <button class="px-4 text-fuchsia-700 text-sm" onclick="search()">
+            <a class="px-4 text-fuchsia-700 text-sm" href="/search" >
               <i class="material-icons">search</i>
-            </button>
+            </a>
           </div>
           <button
             data-collapse-toggle="navbar-search"
@@ -76,15 +99,16 @@
             </li>
             <li>
               <a
-                href="/favourites"
-                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                data-turbo-action="replace"
+                href="https://github.com"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600"
                 >Favourites</a
               >
             </li>
             <li>
               <a
                 href="/history"
-                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600 nav-a"
+                class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600"
                 >History</a
               >
             </li>
@@ -106,6 +130,9 @@
         </div>
       </div>
     </nav>
+    #end block
+
+    #block body
     <div id="approot">
       <div class="grid grid-cols-1 p-3 pb-20 lg:grid-cols-4" id="feed">
         <div class="bg-gray-900 rounded-lg shadow-lg m-2">
@@ -131,11 +158,14 @@
 
       </div>
     </div>
+    #end block
+    
+    #block player
     <div class="fixed bottom-0 w-full bg-black p-1 text-white lg:px-32 z-20">
       <div id="progress" class="mx-1 pb-3">
         <div class="flex justify-between text-sm text-gray-200">
-          <p id="timeplayed">0:00</p>
-          <p id="duration">5:21</p>
+          <p id="timeplayed" data-turbo-permanent>0:00</p>
+          <p id="duration" data-turbo-permanent>5:21</p>
         </div>
         <div class="mt-1" style="width: 100%">
           <div class="h-1 bg-gray-800 rounded-full">
@@ -143,10 +173,11 @@
               id="scrollpercent"
               class="h-1 bg-fuchsia-600 rounded-full relative"
               style="width: 0%"
+              data-turbo-permanent
             >
-              <!--  <span
-                   class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-amber-600 left-full"
-                 ></span> -->
+              <span
+                   class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-fuchsia-600 left-full"
+                 ></span>
             </div>
           </div>
         </div>
@@ -157,24 +188,19 @@
         </button>
         <img
           class="w-10 h-10 -ml-14"
-          src="https://c.saavncdn.com/987/Rodeo-English-2015-20230623002402-150x150.jpg"
-          id="albumcover"
+          src="/static/images/placeholder.jpg"
+          id="player_songcover"
+          data-turbo-permanent
         />
-        <div class="-ml-24 flex mr-2 p-1 pt-0 flex-col h-full">
-          <div class="font-bold" >
-            <button id="songname" onclick="loadDetailedPage();">
-              <div class="bg-gray-900 text-transparent animate-pulse">-----</div>
-            </button>
-          </div>
-          <div class="font-mono text-xs font-light" id="artists">
-            <div class="bg-gray-900 text-transparent animate-pulse">-----</div>
-          </div>
+        <div class="-ml-28 flex mr-12 p-1 pt-0 h-full flex-col">
+            <button id="songname" class="text-white overflow-x-clip w-full" onclick="loadDetailsPage();" data-turbo-permanent></button>
+            <button class="font-mono text-xs w-full font-light text-white overflow-ellipsis" id="artists" data-turbo-permanent></button>
         </div>
         <div class="flex flex-row h-full -ml-14">
           <button class="font-thin p-1 pb-2" onclick="queuePrev();">
             <i class="material-icons">skip_previous</i>
           </button>
-          <button class="font-thin p-1 pb-2" id="playbutton" onclick="play()">
+          <button class="font-thin p-1 pb-2" id="playbutton">
             <i class="material-icons">play_arrow</i>
           </button>
           <button class="font-thin p-1 pb-2" onclick="queueNext();">
@@ -186,10 +212,7 @@
         </div>
       </div>
     </div>
+    #end block
+  
   </body>
-  <script type="text/javascript" src="/static/activity.js"></script>
-  <script type="text/javascript" src="/static/navigation.js"></script>
-  <script type="text/javascript" src="/static/lyr.js" defer></script>
-  <script type="text/javascript" src="/static/lyricsloader.js" defer></script>
-  <link rel="stylesheet" type="text/css" href="/static/lyr.css" />
 </html>

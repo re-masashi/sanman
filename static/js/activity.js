@@ -1,14 +1,12 @@
 let playing = false;
 
-let currentImage = localStorage.getItem("currentImage");
+let currentImage = localStorage.getItem("currentImage") || '/static/images/placeholder.jpg';
 let currentID = localStorage.getItem("currentID")||"c1IjvQEH";
 let currentAudio = localStorage.getItem("currentAudio");
 let currentArtists = localStorage.getItem("currentArtists");
 let currentSongname = localStorage.getItem("currentSongname");
 let currentDuration = localStorage.getItem("currentDuration");
 let currentTitle = localStorage.getItem("currentTitle");
-let currentQueuePrev = localStorage.getItem("currentQueuePrev");
-let currentQueueNext = localStorage.getItem("currentQueueNext");
 let currentQueue = localStorage.getItem('currentQueue');
 let currentQueueIndex = parseInt(localStorage.getItem('currentQueueIndex')||0);
 let currentQueueID = localStorage.getItem('currentQueueID')||'s:'+currentID;
@@ -94,12 +92,10 @@ let mediaSessionInit = ()=>{
 
 let queue = {
 	'queue': JSON.parse(currentQueue)||[],
-	'previous': JSON.parse(currentQueuePrev)||[],
 	'current' : new Audio(currentAudio||'https://aac.saavncdn.com/987/e6953ba47dfe798e3b9b9464ca73b2a2_320.mp4'),
-	'next': JSON.parse(currentQueueNext)||[],
 }
 
-document.getElementById('duration').innerHTML = Math.floor(currentDuration/60)+":"+Math.ceil(currentDuration%60);
+document.getElementById('duration').innerHTML = Math.floor(currentDuration/60)+":"+Math.ceil(currentDuration)%60;
 document.getElementById('artists').innerHTML = currentArtists;
 document.getElementById('songname').innerHTML = currentSongname;
 document.getElementById('albumcover').src = currentImage;

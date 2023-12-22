@@ -1,4 +1,7 @@
-<div class="mt-0">
+#extends _1base
+
+#def body()
+<turbo-frame id="approot" class="mt-0">
     <img
       id="albumcovermob"
       class="lg:hidden mt-8 "
@@ -61,4 +64,5 @@ setQueueState();' class="inline-flex items-center text-base font-semibold text-w
    </li>
    #end for
    </ul>
-</div>
+</turbo-frame>
+#end def

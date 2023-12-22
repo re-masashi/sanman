@@ -1,0 +1,33 @@
+#extends _1base
+#def body()
+
+<div id="approot" class="flex flex-col h-full w-full items-center justify-center bg-black py-10">
+
+	<form class="w-full flex flex-col items-center" action="/apisearch">
+		<input type="text" name="q" class="w-11/12 lg:w-1/2 bg-gray-700 rounded-2xl p-2 px-4" placeholder="Search for a song, album, playlist or artist" />
+		<input type="text" name="queueID" hidden />
+		<input type="submit" hidden />
+	</form>
+	<script type="text/javascript">
+		// bad practice?
+		document.querySelector('form').onsubmit = (e)=>{
+			e.target.queueID.value=appstate.getState('queueID')
+		}
+	</script>
+
+
+	
+	<div id="results" class="w-full text-left mt-4 px-2 lg:px-10">
+		<h3 class="text-gray-400 text-xl" id="songs_header"></h3>
+		<!-- <hr class="w-full h-1 bg-gray-500 border-black" /> -->
+		<ul id="songresults" class="divide-y divide-gray-700" role="list"></ul>
+
+		<h3 class="text-gray-400 text-xl" id="albums_header"></h3>
+		<ul id="albumresults" class="divide-y divide-gray-700" role="list"></ul>
+
+		<h3 class="text-gray-400 text-xl" id="playlists_header"></h3>
+		<ul id="playlistresults" class="divide-y divide-gray-700" role="list"></ul>
+	</div>
+</div>
+
+#end def

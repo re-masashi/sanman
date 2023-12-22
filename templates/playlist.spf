@@ -1,3 +1,6 @@
+#extends _1base
+
+#def body()
 <div class="mt-0">
     <img
       id="playlistcovermob"
@@ -62,3 +65,4 @@ setQueueState();' class="inline-flex items-center text-base font-semibold text-w
    #end for
    </ul>
 </div>
+#end def
