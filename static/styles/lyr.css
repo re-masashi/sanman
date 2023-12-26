@@ -20,3 +20,8 @@
   font-size: 120%;
   color: white;
 }
+
+.turbo-progress-bar {
+  height: 5px;
+  background-color: #7a74de;
+}

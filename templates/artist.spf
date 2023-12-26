@@ -1,0 +1,31 @@
+#extends _1base
+
+#def body()
+#* needed vars
+    $biodata
+    $name
+    $image
+*#  
+    <div id="approot bg-gray-900 h-full">
+            <div class="flex flex-col bg-gray-900  lg:mx-64 lg:rounded-t-3xl overflow-hidden mt-2 lg:mt-0">
+
+                <img
+                  id="detailedsongcover"
+                  class="p-0 md:block m-10 rounded-full mb-2 animate-slideinabv"
+                  src="$image"
+                  alt="album cover Pic"
+                />
+              <div class="w-full p-8">
+                  <div class="text-center flex flex-col col-span-6 w-full">
+                    <h3
+                      class="font-extrabold font-mono text-3xl text-gray-300 text-center w-full"
+                    >
+                      $name
+                    </h3>
+                  </div>
+                  <p class="text-md text-white font-semibold mt-4">$biodata</p>
+
+              </div>
+            </div>
+    </div>
+#end def

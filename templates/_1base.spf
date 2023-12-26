@@ -22,9 +22,27 @@
       <script type="module" async>
         import * as Turbo from 'https://unpkg.com/@hotwired/turbo@8.0.0-beta.1/dist/turbo.es2017-esm.js';
       </script>
+
       <script type="text/javascript" src="/static/js/state.js"></script>
       <script type="text/javascript" src="/static/js/main.js" defer></script>
       <script type="text/javascript" src="/static/js/music_controls.js"></script>
+      <script type="module">
+        import {Controller, Application} from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js";
+        window.Controller = Controller // for access to controllers
+        window.Stimulus = Application.start()
+        window.player = new Music(appstate)
+        Stimulus.register("progress", class extends Controller{
+          static targets = ["scroll", "timeplayed", "duration"]
+          connect(){
+            console.log("Connected!")
+            document.getElementById('playbutton').onclick = (e)=>{
+              appstate.setState('playing', !appstate.getState('playing'))
+            }
+            player.reattach()
+          }
+        })
+      </script>
+
     <!--   <script type="text/javascript" src="/static/activity.js"></script>
       <script type="text/javascript" src="/static/navigation.js"></script>
       <script type="text/javascript" src="/static/lyr.js" defer></script>
@@ -99,8 +117,7 @@
             </li>
             <li>
               <a
-                data-turbo-action="replace"
-                href="https://github.com"
+                href="/favourites"
                 class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-red-600"
                 >Favourites</a
               >
@@ -162,22 +179,24 @@
     
     #block player
     <div class="fixed bottom-0 w-full bg-black p-1 text-white lg:px-32 z-20">
-      <div id="progress" class="mx-1 pb-3">
+      <div id="progress" class="mx-1 pb-3" data-turbo-permanent data-controller="progress"
+        >
         <div class="flex justify-between text-sm text-gray-200">
-          <p id="timeplayed" data-turbo-permanent>0:00</p>
-          <p id="duration" data-turbo-permanent>5:21</p>
+          <p id="timeplayed" data-turbo-permanent data-progress-target="timeplayed">0:00</p>
+          <p id="duration" data-turbo-permanent data-progress-target="duration">-:-</p>
         </div>
         <div class="mt-1" style="width: 100%">
           <div class="h-1 bg-gray-800 rounded-full">
             <div
               id="scrollpercent"
+              data-progress-target="scroll"
               class="h-1 bg-fuchsia-600 rounded-full relative"
               style="width: 0%"
               data-turbo-permanent
             >
-              <span
+<!--               <span
                    class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-fuchsia-600 left-full"
-                 ></span>
+                 ></span> -->
             </div>
           </div>
         </div>
@@ -193,17 +212,18 @@
           data-turbo-permanent
         />
         <div class="-ml-28 flex mr-12 p-1 pt-0 h-full flex-col">
-            <button id="songname" class="text-white overflow-x-clip w-full" onclick="loadDetailsPage();" data-turbo-permanent></button>
+            <button id="songname" class="text-white overflow-x-clip w-full" onclick="loadDetailedPage();" data-turbo-permanent></button>
             <button class="font-mono text-xs w-full font-light text-white overflow-ellipsis" id="artists" data-turbo-permanent></button>
+            <audio id="audio" data-turbo-permanent hidden></audio>
         </div>
         <div class="flex flex-row h-full -ml-14">
-          <button class="font-thin p-1 pb-2" onclick="queuePrev();">
+          <button class="font-thin p-1 pb-2" onclick="player.queuePrev();">
             <i class="material-icons">skip_previous</i>
           </button>
-          <button class="font-thin p-1 pb-2" id="playbutton">
+          <button class="font-thin p-1 pb-2" id="playbutton" data-turbo-permanent>
             <i class="material-icons">play_arrow</i>
           </button>
-          <button class="font-thin p-1 pb-2" onclick="queueNext();">
+          <button class="font-thin p-1 pb-2" onclick="player.queueNext();" >
             <i class="material-icons">skip_next</i>
           </button>
           <button class="font-thin pl-2 pb-2" id="lyricsbtn">
@@ -213,6 +233,12 @@
       </div>
     </div>
     #end block
-  
   </body>
 </html>
+
+
+#def fmt_artists($names, $ids)
+  #for $id in $zip(ids.split(','), names.split(','))
+    <a href="/artists/$id[0]">$id[1]</a>,
+  #end for
+#end def

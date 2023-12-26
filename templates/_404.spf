@@ -3,16 +3,16 @@
 #def body()
 <div id="approot">
 <!-- Page Container -->
-<div class="flex items-center justify-center min-h-screen bg-white">
+<div class="flex items-center justify-center min-h-screen bg-black text-white">
         <div class="flex flex-col">
             <!-- Notes -->
             <span class="text-center font-bold my-10 opacity-30">
-                Continue your journey
+                Oops!
 
                 <hr class="my-4">
 
-                <a href="/" target="_blank" class="text-blue-600">
-                    Convetert to SASS
+                <a href="/" class="text-gray-100">
+                    Go back home?
                 </a>
             </span>
 
@@ -26,17 +26,11 @@
                     This page does not exist
                 </div>
 
-                <div class="text-gray-400 font-medium text-sm md:text-xl lg:text-2xl mt-8">
+                <div class="text-gray-400 font-medium text-sm md:text-xl lg:text-2xl mt-8 text-center">
                     The page you are looking for could not be found.
+                    <br>
+                    The developer is working hard but has not created this yet :(.
                 </div>
-            </div>
-
-            <!-- Continue With -->
-            <div class="flex flex-col mt-48">
-                <div class="text-gray-400 font-bold uppercase">
-                    Continue With
-                </div>
-
             </div>
         </div>
 </div>

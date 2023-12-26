@@ -1,4 +1,4 @@
-#!/home/nafi/projects/sanman/venv/bin/python
+#!/home/drnt/projects/sanman/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

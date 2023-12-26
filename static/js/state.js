@@ -83,35 +83,35 @@ class State{
 	initState(){
 		this.setState(
 			'image',
-			localStorage.getItem("image")||'/static/images/placeholder.jpg',
+			JSON.parse(localStorage.getItem("image"))||'/static/images/placeholder.jpg',
 		)
 		this.setState(
 			'ID',
-			localStorage.getItem("ID")||"c1IjvQEH",
+			JSON.parse(localStorage.getItem("ID"))||"c1IjvQEH",
 		)
 		this.setState(
 			'audio',
-			localStorage.getItem("audio")||'https://aac.saavncdn.com/987/e6953ba47dfe798e3b9b9464ca73b2a2_320.mp4',
+			JSON.parse(localStorage.getItem("audio"))||'https://aac.saavncdn.com/987/e6953ba47dfe798e3b9b9464ca73b2a2_320.mp4',
 		)
 		this.setState(
 			'artists',
-			localStorage.getItem("artists")||"Travis Scott",
+			JSON.parse(localStorage.getItem("artists"))||"Travis Scott",
 		)
 		this.setState(
 			'songname',
-			localStorage.getItem("songname")||"Nightcrawler",
+			JSON.parse(localStorage.getItem("songname"))||"Nightcrawler",
 		)
 		this.setState(
 			'duration',
-			parseFloat(localStorage.getItem("duration")||321),
+			parseFloat(JSON.parse(localStorage.getItem("duration")))||321,
 		)
 		this.setState(
 			'timeplayed',
-			parseFloat(localStorage.getItem("timeplayed")||0),
+			parseFloat(JSON.parse(localStorage.getItem("timeplayed")))||0,
 		)
 		this.setState(
 			'title',
-			localStorage.getItem("title")||"Home | Sanman",
+			JSON.parse(localStorage.getItem("title"))||"Home | Sanman",
 		)
 		this.setState(
 			'queue',
@@ -123,7 +123,7 @@ class State{
 		)
 		this.setState(
 			'queueID',
-			localStorage.getItem('queueID')||'s:'+this.getState('ID'),
+			JSON.parse(localStorage.getItem('queueID'))||'s:'+this.getState('ID'),
 		)
 	}
 }

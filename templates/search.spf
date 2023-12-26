@@ -3,7 +3,7 @@
 
 <div id="approot" class="flex flex-col h-full w-full items-center justify-center bg-black py-10">
 
-	<form class="w-full flex flex-col items-center" action="/apisearch">
+	<form class="w-full flex flex-col items-center" action="/apisearch" autocomplete="off">
 		<input type="text" name="q" class="w-11/12 lg:w-1/2 bg-gray-700 rounded-2xl p-2 px-4" placeholder="Search for a song, album, playlist or artist" />
 		<input type="text" name="queueID" hidden />
 		<input type="submit" hidden />

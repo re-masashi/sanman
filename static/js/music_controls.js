@@ -1,18 +1,22 @@
 class Music {
-  constructor(scrollpercent, timeplayed, progress, duration, state){
-    this.scrollpercent = document.getElementById(scrollpercent)
-    this.timeplayed = document.getElementById(timeplayed)
-    this.progress = document.getElementById(progress)
-    this.duration = document.getElementById(duration)
-
-    this.audio = new Audio(state.getState('audio'))
+  constructor(state){
     this.state = state
+
+    this.scrollpercent = document.getElementById('scrollpercent')
+    this.timeplayed = document.getElementById('timeplayed')
+    this.progress = document.getElementById('progress')
+    this.duration = document.getElementById('duration')
+
+    this.audio = document.getElementById('audio')
+    this.audio.src = this.state.getState('audio')
+    this.queue = this.state.getState('queue') // Array<ID> ID->String
 
     let set_progress = this.setProgress(this);
     let update_progress = this.updateProgress(this);
 
     this.progress.addEventListener("click", set_progress)
     this.audio.addEventListener("timeupdate", update_progress)
+    this.audio.addEventListener("ended", (e)=>{console.log(e.target.currentTime)})
 
     this.audio.currentTime = this.state.getState('timeplayed')
 
@@ -22,7 +26,7 @@ class Music {
       this.timeplayed.innerHTML =
         Math.floor(this.audio.currentTime / 60) +
         ":" +
-        Math.ceil(this.audio.currentTime) % 60
+        Math.floor(this.audio.currentTime) % 60
     })
     this.state.subscribe('audio', (st)=>{
       this.audio.src = st.getState('audio')
@@ -87,22 +91,129 @@ class Music {
             `;
             return;
           }
-
+          this.state.setState('playing', false)
           this.pause();
           
           appstate.setStateWithLS('ID', songID)
 
           const resp = json.data[0];
 
+          let artists = resp.primaryArtists.split(',')
+          let ids = resp.primaryArtistsId.split(',')
+
+          appstate.setStateWithLS('raw_artists', resp.primaryArtists)
+
+          let artist_href = ""
+          for(let i=0;i<artists.length;i++)
+            artist_href+=`<a href="/artists/${ids[i]}">${artists[i]}</a>,`
+          artist_href = artist_href.slice(0,-1) // remove trailing ','
+
           appstate.setStateWithLS('image', resp.image[2].link)
           appstate.setStateWithLS('audio', resp.downloadUrl[4].link)
-          appstate.setStateWithLS('artists', resp.primaryArtists)
+          appstate.setStateWithLS('artists', artist_href)
           appstate.setStateWithLS('songname', resp.name)
           appstate.setStateWithLS('timeplayed', 0)
           appstate.setStateWithLS('duration', resp.duration)
-          appstate.setStateWithLS('title', resp.name+" by "+resp.primaryArtists+"| Sanman")
+          appstate.setStateWithLS('title', resp.name+" by "+appstate.getState('raw_artists')+"| Sanman")
           
+          this.state.setState('playing', true)
           this.play()
         });
+  }
+
+  loadSingle(songID){
+    this.state.setStateWithLS('queueID', 's:'+songID)
+    this.state.setStateWithLS('queue', [songID])
+    this.state.setStateWithLS('queueIndex', 0)
+    this.loadSong(songID)
+    this.queueNext()
+  }
+
+  loadAlbum(albumID){
+    fetch(`https://saavn.me/albums?id=${albumID}`)
+      .then((response) => response.json())
+      .then((json) => {
+        let resp = json.data;
+        let queue = []
+        for (let i=0; i < resp.songs.length ; i++)
+          queue.push(resp.songs[i].id)
+        this.state.setStateWithLS('queue', queue)
+        this.state.setStateWithLS('queueIndex', -1) // queueNext call later
+        this.state.setStateWithLS('queueID', 'a:'+albumID)
+        this.queueNext()
+      })
+  }
+
+  loadPlaylist(playlistID){
+    fetch(`https://saavn.me/playlists?id=${playlistID}`)
+      .then((response) => response.json())
+      .then((json) => {
+        let resp = json.data;
+        let queue = []
+        for (let i=0; i < resp.songs.length ; i++)
+          queue.push(resp.songs[i].id)
+        this.state.setStateWithLS('queue', queue)
+        this.state.setStateWithLS('queueIndex', -1) // queueNext call later
+        this.state.setStateWithLS('queueID', 'p:'+playlistID)
+        this.queueNext()
+      })
+  }
+
+
+  queueNext(){
+
+    if(this.state.getState('queueID').startsWith('s:')){
+      this.state.setState('playing', false)
+      this.audio.currentTime = 0
+      this.state.setStateWithLS('timeplayed', 0)
+      this.state.setState('playing', true)
+      return
+    }
+    let queue = this.state.getState('queue')
+    let queueIndex = (this.state.getState('queueIndex')+1)%queue.length
+    this.state.setStateWithLS('queueIndex', queueIndex)
+    this.loadSong(
+      queue[queueIndex]
+    )
+  }
+
+  queuePrev(){
+
+    if(this.state.getState('queueID').startsWith('s:')){
+      this.state.setState('playing', false)
+      this.audio.currentTime = 0
+      this.state.setStateWithLS('timeplayed', 0)
+      this.state.setState('playing', true)
+      return   
+    }
+    let queue = this.state.getState('queue')
+    let queueIndex = (queue.length+this.state.getState('queueIndex')-1)%queue.length
+    this.state.setState('queueIndex',queueIndex)
+    this.loadSong(
+      queue[queueIndex]
+    )
+  }
+
+  jumpTo(pos, id){
+    if (this.state.getState('queueID')==id) {
+      this.state.setStateWithLS('queueIndex', pos-1)
+      this.queueNext()
+      return
+    }
+    if (id.startsWith('a:')) {
+      this.loadAlbum(id.substring(2))
+    }else if (id.startsWith('p:')) {
+      this.loadPlaylist(id.substring(2))
+    }
+  }
+
+  reattach(){
+    this.scrollpercent = document.getElementById('scrollpercent')
+    this.timeplayed = document.getElementById('timeplayed')
+    this.progress = document.getElementById('progress')
+    this.duration = document.getElementById('duration')
+
+    this.progress.addEventListener("click", this.setProgress)
+    this.audio.addEventListener("timeupdate", this.updateProgress)
   }
 }

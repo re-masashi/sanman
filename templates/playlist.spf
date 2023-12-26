@@ -36,9 +36,10 @@
         </div>
       </div>
     </div>
+
    <ul role="list" class="divide-y px-4 lg:mx-32 bg-gray-900 dark:divide-gray-700">
    #for $song in $playlist['songs']
-   <li class="py-3 sm:py-4">
+   <li class="py-3 sm:py-4" onclick="player.jumpTo(`$playlist['songs'].index($song)`,'p:$playlist.id' )">
        <div class="flex items-center space-x-4">
            <div class="flex-shrink-0">
                <img 
@@ -56,8 +57,7 @@
            <p class="text-white text-xs">
                $song['playCount'] plays
            </p>
-           <button onclick='queue.queue=[]; loadSong("$song.id");
-setQueueState();' class="inline-flex items-center text-base font-semibold text-white">
+           <button class="inline-flex items-center text-base font-semibold text-white">
                <i class="material-icons">play_arrow</i>
            </button>
        </div>

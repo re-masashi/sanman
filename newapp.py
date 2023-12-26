@@ -3,6 +3,8 @@ from sanic.exceptions import NotFound
 import spitfire
 import requests
 import pprint
+import syncedlyrics
+
 
 env = spitfire.Environment('templates')
 env.compiled_templates['_1base'] = spitfire.compiler.util.load_template_file('templates/_1base.spf')
@@ -59,7 +61,6 @@ async def apisearch(request):
         )
     )
     res.headers['content-type'] ='text/vnd.turbo-stream.html'
-    print(request.args.get('queueID'))
     return res
 
 @app.get("/playlists/<playlistid>") # todo: Fetch from user in DB.
@@ -73,8 +74,6 @@ async def playlist_page(request, playlistid):
 
     if data is None:
         return response.text("404")
-
-    print(data)
 
     return response.html(
         env.render_template("playlist", [{
@@ -96,8 +95,6 @@ async def album_page(request, albumid):
     if data is None:
         return response.text("404")
 
-    print(data)
-
     return response.html(
         env.render_template("album", [{
                 "album": data,
@@ -105,12 +102,79 @@ async def album_page(request, albumid):
         )
     )
 
-@app.get("/lyrics/song/")
-async def getlyrics(req,):
-  q = req.args.get('q', '')
-  return response.text(
-    syncedlyrics.search(q)
-  )
+@app.get("/songs/<songid>") # todo: Fetch from user in DB. 
+async def song_page(request, songid):
+    # if not is_logged_in(request):
+    #     return response.redirect("/login") # TODO: Flashes...
+    
+    data = requests.get(
+        'https://saavn.me/songs?id='+songid
+    ).json()["data"][0]
+
+    if data is None:
+        return response.text("404")
+
+    return response.html(
+        env.render_template("song", [{
+                "songname":data['name'],
+                "artists": data['primaryArtists'],
+                "release": data["year"],
+                "image": data["image"][2]['link'],
+                "album": data["album"]
+            }], 
+        )
+    )
+
+@app.get("/artists/<artistid>") # todo: Fetch from user in DB. 
+async def artist_page(request, artistid):
+    # if not is_logged_in(request):
+    #     return response.redirect("/login") # TODO: Flashes...
+    
+    data = requests.get(
+        'https://saavn.me/artists?id='+artistid
+    ).json()["data"]
+
+    if data is None:
+        return response.text("404")
+
+    return response.html(
+        env.render_template("artist", [{
+                "name": data["name"],
+                "image": data['image'][2]['link'],
+                "biodata": """
+                @app.get("/artists/<artistid>") # todo: Fetch from user in DB. 
+                async def artist_page(request, artistid):
+                    # if not is_logged_in(request):
+                    #     return response.redirect("/login") # TODO: Flashes...
+                    
+                    data = requests.get(
+                        'https://saavn.me/artists?id='+artistid
+                    ).json()["data"]
+
+                    if data is None:
+                        return response.text("404")
+                """
+
+            }], 
+        )
+    )
+
+@app.get("/lyrics/")
+async def getlyrics(req,songid):
+    data = requests.get(
+        'https://saavn.me/songs?id='+songid
+    ).json()["data"][0]
+
+    pprint.pprint(data)
+
+    if not data:
+        return response.html('404')
+    
+    return response.html(
+        env.render_template("lyrics", {
+            "lrc":syncedlyrics.search(data['name']+' '+data['primaryArtists'])
+        })
+    )
 
 @app.exception(NotFound)
 async def ignore_404s(request, exception):

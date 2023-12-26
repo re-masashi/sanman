@@ -1,7 +1,7 @@
 #extends _1base
 
 #def body()
-<turbo-frame id="approot" class="mt-0">
+<div id="approot" class="mt-0">
     <img
       id="albumcovermob"
       class="lg:hidden mt-8 "
@@ -36,9 +36,9 @@
         </div>
       </div>
     </div>
-   <ul role="list" class="divide-y px-4 lg:mx-32 bg-gray-900 dark:divide-gray-700">
+   <ul role="list" class="divide-y px-4 lg:mx-32 bg-gray-900 dark:divide-gray-700" id="albumsonglist">
    #for $song in $album['songs']
-   <li class="py-3 sm:py-4">
+   <li class="py-3 sm:py-4" onclick="player.jumpTo(`$album['songs'].index($song)`,'a:$album.id' )">
        <div class="flex items-center space-x-4">
            <div class="flex-shrink-0">
                <img 
@@ -50,19 +50,18 @@
                    $song['name']
                </p>
                <p class="text-sm font-mono text-gray-500 truncate dark:text-gray-400">
-                   $song['primaryArtists']
+                   ${fmt_artists(song['primaryArtists'], song['primaryArtistsId'])}
                </p>
            </div>
            <p class="text-white text-xs">
                $song['playCount'] plays
            </p>
-           <button onclick='queue.queue=[]; loadSong("$song.id");
-setQueueState();' class="inline-flex items-center text-base font-semibold text-white">
+           <button class="inline-flex items-center text-base font-semibold text-white">
                <i class="material-icons">play_arrow</i>
            </button>
        </div>
    </li>
    #end for
    </ul>
-</turbo-frame>
+</div>
 #end def
