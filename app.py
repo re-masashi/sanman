@@ -11,55 +11,58 @@ import syncedlyrics
 import sib_api_v3_sdk
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 configuration = sib_api_v3_sdk.Configuration()
-configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
-api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+configuration.api_key["api-key"] = os.getenv("BREVO_API_KEY")
+api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+    sib_api_v3_sdk.ApiClient(configuration)
+)
 
-env = spitfire.Environment('templates/')
+env = spitfire.Environment("templates/")
 
 app = Sanic(__name__)
 
 register_tortoise(
-    app, db_url="sqlite://db.sqlite3", modules={"models": ["models"]}, generate_schemas=True
+    app,
+    db_url="sqlite://db.sqlite3",
+    modules={"models": ["models"]},
+    generate_schemas=True,
 )
 
-app.static('/static', './static')
+app.static("/static", "./static")
 
 
 @app.get("/")
 async def index(request):
-    return await response.file(
-        "static/index.html"
-    )
+    return await response.file("static/index.html")
+
 
 @app.get("/signup")
 async def signup_get(request):
-    return await response.file(
-        "static/signup.html"
-    )
+    return await response.file("static/signup.html")
+
 
 @app.post("/signup")
 async def signup_post(request):
     try:
         user = await Users.get(EMAIL=request.form["email"][0])
         print(user)
-        return response.redirect("/login") # TODO: Flash 'exists'
+        return response.redirect("/login")  # TODO: Flash 'exists'
     except DoesNotExist:
         user = await Users.create(
-            NAME=request.form["name"][0], 
-            EMAIL=request.form["email"][0]
+            NAME=request.form["name"][0], EMAIL=request.form["email"][0]
         )
         await user.save()
         print(user)
-        return response.redirect("/login") # TODO: Flash 'created succesfully'
+        return response.redirect("/login")  # TODO: Flash 'created succesfully'
+
 
 @app.get("/login")
 async def login_get(request):
-    return await response.file(
-        "static/login.html"
-    )
+    return await response.file("static/login.html")
+
 
 @app.post("/login")
 async def login_post(request):
@@ -109,83 +112,101 @@ async def login_id(request, id):
     #     return response.redirect("/login")
     return response.html("This feature is in Beta. Kindly contact the developer.")
 
+
 @app.get("/logout")
 async def logout(request):
-    res= response.redirect("/")
+    res = response.redirect("/")
     res.delete_cookie("userID")
     return res
 
+
 @app.get("/apisearch")
 async def apisearch(request):
-    q = request.args.get('q', None)
+    q = request.args.get("q", None)
     if q is None:
         return response.html("No results")
-    bl = {"results":[]}
-    res = requests.get(
-      'https://saavn.me/search/songs?query='
-      +request.args['q'][0]+
-      '&page=1&limit=7'
-    ).json().get('data')
-    respl =requests.get(
-      'https://saavn.me/search/playlists?query='
-      +request.args['q'][0]+
-      '&page=1&limit=4'
-    ).json().get('data')
-    resal = requests.get(
-      'https://saavn.me/search/albums?query='
-      +request.args['q'][0]+
-      '&page=1&limit=4'
-    ).json().get('data')
+    bl = {"results": []}
+    res = (
+        requests.get(
+            "https://saavn.me/search/songs?query="
+            + request.args["q"][0]
+            + "&page=1&limit=7"
+        )
+        .json()
+        .get("data")
+    )
+    respl = (
+        requests.get(
+            "https://saavn.me/search/playlists?query="
+            + request.args["q"][0]
+            + "&page=1&limit=4"
+        )
+        .json()
+        .get("data")
+    )
+    resal = (
+        requests.get(
+            "https://saavn.me/search/albums?query="
+            + request.args["q"][0]
+            + "&page=1&limit=4"
+        )
+        .json()
+        .get("data")
+    )
     if res is None:
-      res = bl
-      #return response.html("No results")
+        res = bl
+        # return response.html("No results")
     if respl is None:
-      respl = bl
-      #return response.html("No results")
+        respl = bl
+        # return response.html("No results")
     if resal is None:
-      resal = bl
-      #return response.html("No results")
+        resal = bl
+        # return response.html("No results")
     return response.html(
-        env.render("search_result.spf", [{
-                "songresults": res['results'],
-                "playlistresults":  respl['results'],
-                "albumresults":  resal['results'],
-            }],
-            template_name="search_result"
+        env.render(
+            "search_result.spf",
+            [
+                {
+                    "songresults": res["results"],
+                    "playlistresults": respl["results"],
+                    "albumresults": resal["results"],
+                }
+            ],
+            template_name="search_result",
         )
     )
+
 
 @app.get("/playlists/")
 async def playlist_create(request):
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
-        
+
     return response.html(
-        env.render("playlist.spf", [{
-                "playlist": requests.get(
-                    'https://saavn.me/search/songs?query='
-                    'X'
-                    '&page=1&limit=10'
-                ).json()['data']['results']
-            }], 
-            template_name="search_result"
+        env.render(
+            "playlist.spf",
+            [
+                {
+                    "playlist": requests.get(
+                        "https://saavn.me/search/songs?query=" "X" "&page=1&limit=10"
+                    ).json()["data"]["results"]
+                }
+            ],
+            template_name="search_result",
         )
     )
     if not is_logged_in(request):
-        return response.redirect("/login") # TODO: Flashes...
+        return response.redirect("/login")  # TODO: Flashes...
 
-    return response.html(
-        "<h1>feature will soon be available. >_<."
-    )
+    return response.html("<h1>feature will soon be available. >_<.")
 
-@app.get("/playlists/<playlistid>") # todo: Fetch from user in DB.
+
+@app.get("/playlists/<playlistid>")  # todo: Fetch from user in DB.
 async def playlist_page(request, playlistid):
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
-    
-    data = requests.get(
-        'https://saavn.me/playlists?id='+playlistid
-    ).json()["data"]
+
+    data = requests.get("https://saavn.me/playlists?id=" + playlistid).json()["data"]
 
     if data is None:
         return response.text("404")
@@ -193,22 +214,24 @@ async def playlist_page(request, playlistid):
     print(data)
 
     return response.html(
-        env.render("playlist.spf", [{
-                "playlist": data,
-            }], 
-            template_name="playlist"
+        env.render(
+            "playlist.spf",
+            [
+                {
+                    "playlist": data,
+                }
+            ],
+            template_name="playlist",
         )
     )
 
 
-@app.get("/albums/<albumid>") # todo: Fetch from user in DB.
+@app.get("/albums/<albumid>")  # todo: Fetch from user in DB.
 async def album_page(request, albumid):
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
-    
-    data = requests.get(
-        'https://saavn.me/albums?id='+albumid
-    ).json()["data"]
+
+    data = requests.get("https://saavn.me/albums?id=" + albumid).json()["data"]
 
     if data is None:
         return response.text("404")
@@ -216,44 +239,52 @@ async def album_page(request, albumid):
     print(data)
 
     return response.html(
-        env.render("album.spf", [{
-                "album": data,
-            }], 
-            template_name="album"
+        env.render(
+            "album.spf",
+            [
+                {
+                    "album": data,
+                }
+            ],
+            template_name="album",
         )
     )
 
+
 @app.get("/lyrics/song/")
-async def getlyrics(req,):
-  q = req.args.get('q', '')
-  return response.text(
-    syncedlyrics.search(q)
-  )
+async def getlyrics(
+    req,
+):
+    q = req.args.get("q", "")
+    return response.text(syncedlyrics.search(q))
+
 
 @app.get("/history")
-async def history(request,):
+async def history(
+    request,
+):
     if not is_logged_in(request):
         return response.redirect("/login")
 
-    return response.html(
-        "<h1>feature will soon be available. >_<.</h1>"
-    )
+    return response.html("<h1>feature will soon be available. >_<.</h1>")
+
 
 @app.get("/favourites")
-async def fav(request,):
+async def fav(
+    request,
+):
     if not is_logged_in(request):
-        return response.redirect("/login") # TODO: Flashes...
+        return response.redirect("/login")  # TODO: Flashes...
 
-    return response.html(
-        "<h1>feature will soon be available. >_<."
-    )
+    return response.html("<h1>feature will soon be available. >_<.")
+
 
 @app.get("/share/song/")
-async def sharesongs(req,):
-  return await response.file(
-    "static/shared.html"
-  )
+async def sharesongs(
+    req,
+):
+    return await response.file("static/shared.html")
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1337, debug=True,
-    auto_reload=False)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=1337, debug=True, auto_reload=False)
