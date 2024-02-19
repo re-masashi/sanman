@@ -194,9 +194,6 @@
               style="width: 0%"
               data-turbo-permanent
             >
-<!--               <span
-                   class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-fuchsia-600 left-full"
-                 ></span> -->
             </div>
           </div>
         </div>
