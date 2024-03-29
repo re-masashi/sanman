@@ -87,7 +87,7 @@ let showMoreOptions = () =>{
     document.getElementById('moreoptions').remove();
     return;
   }
-  document.documentElement.innerHTML+=`
+  document.body.innerHTML+=`
     <div class="font-thin bg-black ml-1 duration-300 flex items-center flex-col fixed bottom-0 left-0 mb-24 z-50 rounded-3xl" id="moreoptions">
       <button class="p-2 hover:-translate-y-1 hover:scale-110 duration-300 transition" onclick="downloadSong();">
         <i class="material-icons text-fuchsia-500">download</i>
@@ -105,7 +105,7 @@ let showMoreOptions = () =>{
 let mediaSessionInit = ()=>{
   if ("mediaSession" in navigator) {
   	let currentSongname = appstate.getState('songname')
-  	let currentArtists = appstate.getState('raw_artists')||appstate.getState('artists')
+  	let currentArtists = appstate.getState('raw_artists')
   	let currentImage = appstate.getState('image')
     navigator.mediaSession.metadata = new MediaMetadata({
       title: currentSongname,
@@ -156,6 +156,10 @@ let mediaSessionInit = ()=>{
 }
 
 mediaSessionInit()
+
+appstate.subscribe('timeplayed', (state)=>{
+  lrc.move(state.getState('timeplayed'))
+})
 
 let openLyrics=()=>{
 	Turbo.visit('/lyrics/'+appstate.getState('ID'))

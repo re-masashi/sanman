@@ -36,12 +36,12 @@ app.static("/static", "./static")
 
 @app.get("/")
 async def index(request):
-    return await response.file("static/index.html")
+    return response.html(env.render("_1base.spf", {}))
 
 
 @app.get("/signup")
 async def signup_get(request):
-    return await response.file("static/signup.html")
+    return await response.file("static/html/signup.html")
 
 
 @app.post("/signup")
@@ -61,7 +61,7 @@ async def signup_post(request):
 
 @app.get("/login")
 async def login_get(request):
-    return await response.file("static/login.html")
+    return await response.file("static/html/login.html")
 
 
 @app.post("/login")
@@ -128,7 +128,7 @@ async def apisearch(request):
     bl = {"results": []}
     res = (
         requests.get(
-            "https://saavn.me/search/songs?query="
+            "https://saavn.dev/search/songs?query="
             + request.args["q"][0]
             + "&page=1&limit=7"
         )
@@ -137,7 +137,7 @@ async def apisearch(request):
     )
     respl = (
         requests.get(
-            "https://saavn.me/search/playlists?query="
+            "https://saavn.dev/search/playlists?query="
             + request.args["q"][0]
             + "&page=1&limit=4"
         )
@@ -146,7 +146,7 @@ async def apisearch(request):
     )
     resal = (
         requests.get(
-            "https://saavn.me/search/albums?query="
+            "https://saavn.dev/search/albums?query="
             + request.args["q"][0]
             + "&page=1&limit=4"
         )
@@ -188,7 +188,7 @@ async def playlist_create(request):
             [
                 {
                     "playlist": requests.get(
-                        "https://saavn.me/search/songs?query=" "X" "&page=1&limit=10"
+                        "https://saavn.dev/search/songs?query=" "X" "&page=1&limit=10"
                     ).json()["data"]["results"]
                 }
             ],
@@ -206,7 +206,7 @@ async def playlist_page(request, playlistid):
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
 
-    data = requests.get("https://saavn.me/playlists?id=" + playlistid).json()["data"]
+    data = requests.get("https://saavn.dev/playlists?id=" + playlistid).json()["data"]
 
     if data is None:
         return response.text("404")
@@ -231,7 +231,7 @@ async def album_page(request, albumid):
     # if not is_logged_in(request):
     #     return response.redirect("/login") # TODO: Flashes...
 
-    data = requests.get("https://saavn.me/albums?id=" + albumid).json()["data"]
+    data = requests.get("https://saavn.dev/albums?id=" + albumid).json()["data"]
 
     if data is None:
         return response.text("404")
@@ -283,7 +283,7 @@ async def fav(
 async def sharesongs(
     req,
 ):
-    return await response.file("static/shared.html")
+    return await response.file("static/html/shared.html")
 
 
 if __name__ == "__main__":

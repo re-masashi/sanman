@@ -6,6 +6,7 @@
 	$artists
 	$release
 	$image
+  $features
 *#	
 	<div id="approot bg-gray-900 h-full">
 		        <h1 class="w-full text-md text-gray-100 font-sans text-center mt-10">
@@ -30,6 +31,7 @@
 		            </h3>
 		            <h4 class="text-gray-400 text-xl font-mono">$artists</h4>
 		            <h5 class="text-xs pt-2 font-light text-white">$release</h5>
+                <h5 class="text-xs pt-2 font-light text-white">$features</h5>
 		          </div>
 		        </div>
 		      </div>

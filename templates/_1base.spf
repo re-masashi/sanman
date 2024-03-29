@@ -24,7 +24,10 @@
       </script>
 
       <script type="text/javascript" src="/static/js/state.js"></script>
+
       <script type="text/javascript" src="/static/js/main.js" defer></script>
+<script src="/static/js/lyr.js" defer></script>
+
       <script type="text/javascript" src="/static/js/music_controls.js"></script>
       <script type="module">
         import {Controller, Application} from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js";
@@ -194,6 +197,9 @@
               style="width: 0%"
               data-turbo-permanent
             >
+<!--               <span
+                   class="w-4 h-4 -top-[5px] absolute rounded-full shadow bg-fuchsia-600 left-full"
+                 ></span> -->
             </div>
           </div>
         </div>
@@ -209,7 +215,7 @@
           data-turbo-permanent
         />
         <div class="-ml-28 flex mr-12 p-1 pt-0 h-full flex-col">
-            <button id="songname" class="text-white overflow-x-clip w-full" onclick="loadDetailedPage();" data-turbo-permanent></button>
+            <button id="songname" class="text-white overflow-x-clip w-full font-semibold" onclick="loadDetailedPage();" data-turbo-permanent></button>
             <button class="font-mono text-xs w-full font-light text-white overflow-ellipsis" id="artists" data-turbo-permanent></button>
             <audio id="audio" data-turbo-permanent hidden></audio>
         </div>
@@ -222,9 +228,6 @@
           </button>
           <button class="font-thin p-1 pb-2" onclick="player.queueNext();" >
             <i class="material-icons">skip_next</i>
-          </button>
-          <button class="font-thin pl-2 pb-2" id="lyricsbtn">
-            <i class="material-icons" onclick="openLyrics();">lyrics</i>
           </button>
         </div>
       </div>

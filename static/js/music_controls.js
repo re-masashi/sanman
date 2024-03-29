@@ -16,6 +16,7 @@ class Music {
 
     this.progress.addEventListener("click", set_progress)
     this.audio.addEventListener("timeupdate", update_progress)
+    this.audio.addEventListener("ended", (e)=>{this.queueNext()})
     this.audio.addEventListener("ended", (e)=>{console.log(e.target.currentTime)})
 
     this.audio.currentTime = this.state.getState('timeplayed')
@@ -35,7 +36,8 @@ class Music {
       const currentDuration = st.getState('duration')
       this.duration.innerText = Math.floor(currentDuration/60)+":"+Math.floor(currentDuration%60);
     })
-
+    
+    this.lyricer = new Lyricer()
   }
 
   setProgress(self) {
@@ -215,5 +217,14 @@ class Music {
 
     this.progress.addEventListener("click", this.setProgress)
     this.audio.addEventListener("timeupdate", this.updateProgress)
+    this.audio.addEventListener("ended",(e)=>{
+      this.queueNext()
+    })
+    window.addEventListener('lyricerclick', function(e){
+        if (e.detail.time > 0&&e.detail.time!=undefined) {
+            appstate.setState('timeplayed', e.detail.time);
+            lrc.move(e.detail.time);
+        }
+    });
   }
 }

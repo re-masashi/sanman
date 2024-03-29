@@ -2,17 +2,16 @@
   font-size: 88%;
   text-shadow: 0 0 1px #EEEEEE;
   color: #666666;
-  overflow: scroll;
 }
 
 #lyricer ul {
   list-style-type: none;
-  padding: 3em;
+  margin: 3em;
+  padding: 2em;
 }
 
 #lyricer ul li {
   text-align: center;
-  overflow: scroll;
   transition: all 0.13s ease-out;
 }
 

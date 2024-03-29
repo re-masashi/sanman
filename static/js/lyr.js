@@ -147,3 +147,5 @@
   window.Lyricer = Lyricer; //exposed to global
 
 })();
+
+window.lrc = new Lyricer()

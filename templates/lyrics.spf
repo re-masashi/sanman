@@ -1,0 +1,22 @@
+#extends _1base
+      
+#def body()
+  <div id="approot">
+    <div id="lyricer"></div>
+  </div>
+  <script defer>
+  lrc.setLrc(`$lrc`)
+  if(document.getElementById(lrc.divID))
+  lrc.move(appstate.getState('timeplayed'))
+    appstate.subscribe('timeplayed', (state)=>{
+    if(document.getElementById(lrc.divID))
+      lrc.move(state.getState('timeplayed'))
+    })
+    window.addEventListener('lyricerclick', function(e){
+        if (e.detail.time > 0&&e.detail.time!=undefined) {
+            appstate.setState('timeplayed', e.detail.time);
+            lrc.move(e.detail.time);
+        }
+    });
+  </script>
+#end def
