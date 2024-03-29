@@ -37,13 +37,13 @@ async def apisearch(request):
         return response.html("No results")
     bl = {"results":[]}
     res = requests.get(
-        f'https://saavn.me/search/songs?query={q}&page={page}&limit=4'
+        f'https://saavn.dev/api/search/songs?query={q}&page={page}&limit=4'
     ).json().get('data')
     respl =requests.get(
-        f'https://saavn.me/search/playlists?query={q}&page={page}&limit=4'
+        f'https://saavn.dev/api/search/playlists?query={q}&page={page}&limit=4'
     ).json().get('data')
     resal = requests.get(
-      f'https://saavn.me/search/albums?query={q}&page={page}&limit=4'
+      f'https://saavn.dev/api/search/albums?query={q}&page={page}&limit=4'
     ).json().get('data')
     if res is None:
       res = bl
@@ -69,7 +69,7 @@ async def playlist_page(request, playlistid):
     #     return response.redirect("/login") # TODO: Flashes...
     
     data = requests.get(
-        'https://saavn.me/playlists?id='+playlistid
+        'https://saavn.dev/api/playlists/'+playlistid
     ).json()["data"]
 
     if data is None:
@@ -89,7 +89,7 @@ async def album_page(request, albumid):
     #     return response.redirect("/login") # TODO: Flashes...
     
     data = requests.get(
-        'https://saavn.me/albums?id='+albumid
+        'https://saavn.dev/api/albums?id='+albumid
     ).json()["data"]
 
     if data is None:
@@ -108,7 +108,7 @@ async def song_page(request, songid):
     #     return response.redirect("/login") # TODO: Flashes...
     
     data = requests.get(
-        'https://saavn.me/songs?id='+songid
+        'https://saavn.dev/api/songs/'+songid
     ).json()["data"][0]
 
     if data is None:
@@ -117,11 +117,17 @@ async def song_page(request, songid):
     return response.html(
         env.render_template("song", [{
                 "songname":data['name'],
-                "artists": data['primaryArtists'],
+                "artists": ",".join(list(map(
+                    lambda artist: artist['name'], 
+                    data['artists']['primary'],
+                ))),
                 "release": data["year"],
-                "image": data["image"][2]['link'],
+                "image": data["image"][2]['url'],
                 "album": data["album"],
-                "features": data['featuredArtists']
+                "features": ",".join(list(map(
+                    lambda artist: artist['name'], 
+                    data['artists']['featured'],
+                ))),
             }], 
         )
     )
@@ -132,7 +138,7 @@ async def artist_page(request, artistid):
     #     return response.redirect("/login") # TODO: Flashes...
     
     data = requests.get(
-        'https://saavn.me/artists?id='+artistid
+        'https://saavn.dev/api/artists?id='+artistid
     ).json()["data"]
 
     if data is None:
@@ -163,7 +169,7 @@ async def artist_page(request, artistid):
 @app.get("/lyrics/<songid>")
 async def getlyrics(req,songid):
     data = requests.get(
-        'https://saavn.me/songs?id='+songid
+        'https://saavn.dev/api/songs?id='+songid
     ).json()["data"][0]
 
     pprint.pprint(data)
@@ -186,4 +192,4 @@ async def ignore_404s(request, exception):
 
 
 if __name__=="__main__":
-  app.run(host="0.0.0.0", port=8000)
+  app.run(host="0.0.0.0", port=8000, debug=True)

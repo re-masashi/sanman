@@ -13,14 +13,16 @@
                 <div class="flex-shrink-0">
                     <img 
                        class="w-10 h-10 rounded-md" 
-                       src="$song['image'][0].link">
+                       src="$song['image'][0].url">
                 </div>
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                     $song['name']
                 </p>
                 <p class="text-sm truncate text-gray-400">
-                   ${fmt_artists(song['primaryArtists'], song['primaryArtistsId'])}
+                    #for $artist in $song['artists']['primary']
+                        <a href="/artists/$artist.id">$artist.name</a>
+                    #end for
                 </p> 
             </div>
             <span class="text-xs text-gray-700 font-black">Song</span>
@@ -49,14 +51,13 @@
                 <div class="flex-shrink-0">
                     <img 
                         class="w-10 h-10 rounded-md" 
-                        src="$playlist['image'][0].link">
+                        src="$playlist['image'][0].url">
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                         $playlist['name']
                     </p>
                     <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                        $playlist['firstname'], $playlist['lastname']
                     </p>
                 </div>
                 <span class="text-xs text-gray-700 font-black">Playlist</span>
@@ -85,17 +86,17 @@
                 <div class="flex-shrink-0">
                     <img 
                         class="w-10 h-10 rounded-md" 
-                        src="$playlist['image'][0].link">
+                        src="$playlist['image'][0].url">
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                         $playlist['name']
                     </p>
-                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                        #for $artist in $playlist['primaryArtists']
-                            <a href="/artists/$artist.id">$artist.name</a>,
+                    <p class="text-sm truncate text-gray-400">
+                        #for $artist in $playlist['artists']['primary']
+                            $artist
                         #end for
-                    </p>
+                    </p> 
                 </div>
                 <span class="text-xs text-gray-700 font-black">Album</span>
                 <button data-queue-id="s:$playlist.id"
@@ -116,18 +117,18 @@
 
 <turbo-stream action="replace" target="songs_header">
   <template>
-    Songs
+    <div>Songs</div>
   </template>
 </turbo-stream>
 
 <turbo-stream action="replace" target="albums_header">
   <template>
-    Albums
+    <div>Albums</div>
   </template>
 </turbo-stream>
 
 <turbo-stream action="replace" target="playlists_header">
   <template>
-    Playlists
+    <div>Playlists</div>
   </template>
 </turbo-stream>

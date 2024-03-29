@@ -26,7 +26,7 @@
       <script type="text/javascript" src="/static/js/state.js"></script>
 
       <script type="text/javascript" src="/static/js/main.js" defer></script>
-<script src="/static/js/lyr.js" defer></script>
+      <script src="/static/js/lyr.js" defer></script>
 
       <script type="text/javascript" src="/static/js/music_controls.js"></script>
       <script type="module">
@@ -52,7 +52,7 @@
       <script type="text/javascript" src="/static/lyricsloader.js" defer></script> -->
       #end block
   </head>
-  <body class="bg-black pt-14 pb-24">
+  <body class="bg-black pt-14 pb-24 text-white">
     #block navbar
     <nav class="bg-black w-full z-20 top-0 fixed" id="navbar">
       <div
@@ -214,7 +214,7 @@
           id="player_songcover"
           data-turbo-permanent
         />
-        <div class="-ml-28 flex mr-12 p-1 pt-0 h-full flex-col">
+        <div class="-ml-28 flex mb-1 mr-12 p-1 pt-0 h-full flex-col">
             <button id="songname" class="text-white overflow-x-clip w-full font-semibold" onclick="loadDetailedPage();" data-turbo-permanent></button>
             <button class="font-mono text-xs w-full font-light text-white overflow-ellipsis" id="artists" data-turbo-permanent></button>
             <audio id="audio" data-turbo-permanent hidden></audio>

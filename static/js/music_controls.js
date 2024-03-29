@@ -69,11 +69,12 @@ class Music {
   }
 
   loadSong(songID){
-      fetch(`https://saavn.me/songs?id=${songID}`)
+      fetch(`https://saavn.dev/api/songs/${songID}`)
         .then((response) => response.json())
         .then((json) => {
-          if (json.data === null) {
+          if (json.data == null) {
             console.log("SUMN WRONG")
+            console.log(json)
             document.getElementById('approot').innerHTML = document.getElementById('approot').innerHTML+
             `
             <div id="toast" class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 py-10">
@@ -100,18 +101,16 @@ class Music {
 
           const resp = json.data[0];
 
-          let artists = resp.primaryArtists.split(',')
-          let ids = resp.primaryArtistsId.split(',')
-
-          appstate.setStateWithLS('raw_artists', resp.primaryArtists)
+          let artists = resp.artists.primary
+          appstate.setStateWithLS('raw_artists', artists.map(x=>x.name))
 
           let artist_href = ""
           for(let i=0;i<artists.length;i++)
-            artist_href+=`<a href="/artists/${ids[i]}">${artists[i]}</a>,`
+            artist_href+=`<a href="/artists/${artists[i].id}">${artists[i].name}</a>,`
           artist_href = artist_href.slice(0,-1) // remove trailing ','
 
-          appstate.setStateWithLS('image', resp.image[2].link)
-          appstate.setStateWithLS('audio', resp.downloadUrl[4].link)
+          appstate.setStateWithLS('image', resp.image[2].url)
+          appstate.setStateWithLS('audio', resp.downloadUrl[4].url)
           appstate.setStateWithLS('artists', artist_href)
           appstate.setStateWithLS('songname', resp.name)
           appstate.setStateWithLS('timeplayed', 0)
@@ -129,10 +128,11 @@ class Music {
     this.state.setStateWithLS('queueIndex', 0)
     this.loadSong(songID)
     this.queueNext()
+    console.log("done. set new song")
   }
 
   loadAlbum(albumID){
-    fetch(`https://saavn.me/albums?id=${albumID}`)
+    fetch(`https://saavn.dev/api/albums?id=${albumID}`)
       .then((response) => response.json())
       .then((json) => {
         let resp = json.data;
@@ -147,7 +147,7 @@ class Music {
   }
 
   loadPlaylist(playlistID){
-    fetch(`https://saavn.me/playlists?id=${playlistID}`)
+    fetch(`https://saavn.dev/api/playlists/${playlistID}`)
       .then((response) => response.json())
       .then((json) => {
         let resp = json.data;
@@ -161,9 +161,7 @@ class Music {
       })
   }
 
-
   queueNext(){
-
     if(this.state.getState('queueID').startsWith('s:')){
       this.state.setState('playing', false)
       this.audio.currentTime = 0
