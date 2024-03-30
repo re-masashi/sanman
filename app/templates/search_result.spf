@@ -1,0 +1,134 @@
+
+#def fmt_artists($names, $ids)
+  #for $id in $zip(ids.split(','), names.split(','))
+    <a href="/artists/$id[0]">$id[1]</a>,
+  #end for
+#end def
+
+<turbo-stream action="update" target="songresults">
+  <template>
+    #for $song in $songresults
+        <li class="py-3 sm:py-4" onclick="player.loadSingle('$song.id');">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <img 
+                       class="w-10 h-10 rounded-md" 
+                       src="$song['image'][0].url">
+                </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                    $song['name']
+                </p>
+                <p class="text-sm truncate text-gray-400">
+                    #for $artist in $song['artists']['primary']
+                        <a href="/artists/$artist.id">$artist.name</a>
+                    #end for
+                </p> 
+            </div>
+            <span class="text-xs text-gray-700 font-black">Song</span>
+            <button data-queue-id="s:$song.id"
+                class="inline-flex items-center text-base font-semibold text-white"
+            >
+                #if $queueID.__eq__('s:'+song.id)
+                    <i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>
+                #else
+                    <i class="material-icons">play_arrow</i>
+                #end if
+            </button>
+        </div>
+        </li>
+    #end for    
+  </template>
+</turbo-stream>
+
+
+<turbo-stream action="update" target="playlistresults">
+  <template>
+    #for $playlist in $playlistresults
+        #if $playlist
+        <li class="py-3 sm:py-4" onclick="player.loadPlaylist(`$playlist['id']`)">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <img 
+                        class="w-10 h-10 rounded-md" 
+                        src="$playlist['image'][0].url">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                        $playlist['name']
+                    </p>
+                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                    </p>
+                </div>
+                <span class="text-xs text-gray-700 font-black">Playlist</span>
+                <button data-queue-id="s:$playlist.id"
+                    class="inline-flex items-center text-base font-semibold text-white"
+                >
+                    #if $queueID.__eq__('p:'+playlist.id)
+                        <i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>
+                    #else
+                        <i class="material-icons">play_arrow</i>
+                    #end if
+                </button>
+            </div>
+        </li>
+        #end if
+    #end for
+  </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="albumresults">
+  <template>
+    #for $playlist in $albumresults
+        #if $playlist
+        <li class="py-3 sm:py-4" onclick="player.loadAlbum(`$playlist['id']`)">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <img 
+                        class="w-10 h-10 rounded-md" 
+                        src="$playlist['image'][0].url">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                        $playlist['name']
+                    </p>
+                    <p class="text-sm truncate text-gray-400">
+                        #for $artist in $playlist['artists']['primary']
+                            $artist
+                        #end for
+                    </p> 
+                </div>
+                <span class="text-xs text-gray-700 font-black">Album</span>
+                <button data-queue-id="s:$playlist.id"
+                    class="inline-flex items-center text-base font-semibold text-white"
+                >
+                    #if $queueID.__eq__('a:'+playlist.id)
+                        <i class="material-icons animate-glotext bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-black text-center">pause</i>
+                    #else
+                        <i class="material-icons">play_arrow</i>
+                    #end if
+                </button>
+            </div>
+        </li>
+        #end if
+    #end for
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="songs_header">
+  <template>
+    <div>Songs</div>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="albums_header">
+  <template>
+    <div>Albums</div>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="playlists_header">
+  <template>
+    <div>Playlists</div>
+  </template>
+</turbo-stream>

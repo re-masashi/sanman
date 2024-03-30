@@ -1,0 +1,68 @@
+#extends _1base
+
+#def body()
+<div class="mt-0">
+    <img
+      id="playlistcovermob"
+      class="lg:hidden mt-8 "
+      src="$playlist['image'][2].link"
+      alt="playlist cover Pic"
+    />
+    <div class="flex bg-gray-900 z-50 lg:mx-32 lg:rounded-t-3xl overflow-hidden ">
+        <img
+          id="playlistcover"
+          class="lg:h-64 h-10 p-0 rounded hidden md:block"
+          src="$playlist['image'][2].link"
+          alt="playlist cover Pic"
+        />
+      <div class="w-full p-8">
+        <div class="flex justify-between">
+          <div>
+            <h3
+              class="font-extrabold text-3xl text-gray-300"
+            >
+              $playlist['name']
+            </h3>
+            <p class="text-sm text-gray-400 mt-1 font-mono">
+              $playlist['firstname'], $playlist['lastname']
+            </p>
+          </div>
+          <div class="text-fuchsia-700">
+            <i class="material-icons">favorite</i>
+          </div>
+        </div>
+        <div class="pt-8 font-light text-white">
+            Number of Songs: $playlist['songCount']
+        </div>
+      </div>
+    </div>
+
+   <ul role="list" class="divide-y px-4 lg:mx-32 bg-gray-900 dark:divide-gray-700">
+   #for $song in $playlist['songs']
+   <li class="py-3 sm:py-4" onclick="player.jumpTo(`$playlist['songs'].index($song)`,'p:$playlist.id' )">
+       <div class="flex items-center space-x-4">
+           <div class="flex-shrink-0">
+               <img 
+                class="w-8 h-8 rounded-full" 
+                src="$song['image'][0].link">
+           </div>
+           <div class="flex-1 min-w-0">
+               <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                   $song['name']
+               </p>
+               <p class="text-sm font-mono text-gray-500 truncate dark:text-gray-400">
+                   $song['primaryArtists']
+               </p>
+           </div>
+           <p class="text-white text-xs">
+               $song['playCount'] plays
+           </p>
+           <button class="inline-flex items-center text-base font-semibold text-white">
+               <i class="material-icons">play_arrow</i>
+           </button>
+       </div>
+   </li>
+   #end for
+   </ul>
+</div>
+#end def

@@ -1,0 +1,40 @@
+#extends _1base
+
+#def body()
+#* needed vars
+	$songname
+	$artists
+	$release
+	$image
+  $features
+*#	
+	<div id="approot bg-gray-900 h-full">
+		        <h1 class="w-full text-md text-gray-100 font-sans text-center mt-10">
+		        	<span class="text-sm text-gray-300">Album:</span> <a href="/albums/$album.id">$album.name</a>
+		        </h1>
+
+		    <div class="flex flex-col bg-gray-900  lg:mx-64 lg:rounded-t-3xl overflow-hidden mt-2 lg:mt-0">
+
+		        <img
+		          id="detailedsongcover"
+		          class="p-0 rounded md:block"
+		          src="$image"
+		          alt="album cover Pic"
+		        />
+		      <div class="w-full p-8">
+		        <div>
+		          <div class="text-center flex flex-col col-span-6 w-full">
+		            <h3
+		              class="font-extrabold text-3xl text-gray-300 text-center w-full"
+		            >
+		              $songname
+		            </h3>
+		            <h4 class="text-gray-400 text-xl font-mono">$artists</h4>
+		            <h5 class="text-xs pt-2 font-light text-white">$release</h5>
+                <h5 class="text-xs pt-2 font-light text-white">$features</h5>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+	</div>
+#end def

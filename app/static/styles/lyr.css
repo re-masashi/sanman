@@ -1,0 +1,26 @@
+#lyricer {
+  font-size: 88%;
+  text-shadow: 0 0 1px #EEEEEE;
+  color: #666666;
+}
+
+#lyricer ul {
+  list-style-type: none;
+  margin: 3em;
+  padding: 2em;
+}
+
+#lyricer ul li {
+  text-align: center;
+  transition: all 0.13s ease-out;
+}
+
+#lyricer .lyricer-current-line {
+  font-size: 120%;
+  color: white;
+}
+
+.turbo-progress-bar {
+  height: 5px;
+  background-color: #7a74de;
+}
