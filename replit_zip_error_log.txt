@@ -1,6 +1,0 @@
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/python-3.10:v58-20240322-590b495","time":"2024-03-29T04:14:09Z"}
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/replit:v7-20240319-38caddd","time":"2024-03-29T04:14:09Z"}
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file sanman/venv/bin/python","time":"2024-03-29T04:14:17Z"}
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file sanman/venv/bin/python3","time":"2024-03-29T04:14:17Z"}
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file sanman/venv/bin/python3.11","time":"2024-03-29T04:14:17Z"}
-{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file sanman/venv/lib64","time":"2024-03-29T04:14:27Z"}
