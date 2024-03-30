@@ -2,3 +2,4 @@ sanic
 spitfire3
 requests
 syncedlyrics
+setuptools

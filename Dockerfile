@@ -11,13 +11,6 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip install -r requirements.txt
 RUN ls /app; pwd
 
-# Stage 2
-FROM python:3 AS runner
- 
-WORKDIR /app
- 
-COPY --from=builder /app/venv venv
- 
 ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
