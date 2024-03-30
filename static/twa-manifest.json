@@ -4,7 +4,7 @@
   "name": "Sanman, the liberated music app",
   "launcherName": "Sanman",
   "display": "standalone",
-  "themeColor": "#FF0000",
+  "themeColor": "#000000",
   "themeColorDark": "#000000",
   "navigationColor": "#000000",
   "navigationColorDark": "#000000",
