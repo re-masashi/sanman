@@ -250,6 +250,29 @@ async def album_page(request, albumid):
         )
     )
 
+@app.get("/artists/<artistid>")  # todo: Fetch from user in DB.
+async def artist_page(request, albumid):
+    # if not is_logged_in(request):
+    #     return response.redirect("/login") # TODO: Flashes...
+
+    data = requests.get("https://saavn.dev/albums?id=" + albumid).json()["data"]
+
+    if data is None:
+        return response.text("404")
+
+    print(data)
+
+    return response.html(
+        env.render(
+            "album.spf",
+            [
+                {
+                    "album": data,
+                }
+            ],
+            template_name="album",
+        )
+    )
 
 @app.get("/lyrics/song/")
 async def getlyrics(
