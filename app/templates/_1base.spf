@@ -230,9 +230,9 @@
           <button class="font-thin p-1 pb-2" onclick="player.queueNext();" >
             <i class="material-icons">skip_next</i>
           </button>
-          <button class="font-thin p-1 pb-2" onclick="openLyrics()">
+          <a class="font-thin p-1 pb-2" href="/lyrics">
             <i class="material-icons">lyrics</i>
-          </button>
+          </a>
         </div>
       </div>
     </div>
