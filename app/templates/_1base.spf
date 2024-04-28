@@ -25,15 +25,16 @@
 
       <script type="text/javascript" src="/static/js/state.js"></script>
 
-      <script type="text/javascript" src="/static/js/main.js" defer></script>
       <script src="/static/js/lyr.js" defer></script>
-
       <script type="text/javascript" src="/static/js/music_controls.js"></script>
+      <script type="text/javascript" src="/static/js/main.js" defer></script>
+
       <script type="module">
         import {Controller, Application} from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js";
         window.Controller = Controller // for access to controllers
         window.Stimulus = Application.start()
         window.player = new Music(appstate)
+
         Stimulus.register("progress", class extends Controller{
           static targets = ["scroll", "timeplayed", "duration"]
           connect(){
@@ -228,6 +229,9 @@
           </button>
           <button class="font-thin p-1 pb-2" onclick="player.queueNext();" >
             <i class="material-icons">skip_next</i>
+          </button>
+          <button class="font-thin p-1 pb-2" onclick="openLyrics()">
+            <i class="material-icons">lyrics</i>
           </button>
         </div>
       </div>

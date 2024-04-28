@@ -2,21 +2,26 @@
       
 #def body()
   <div id="approot">
-    <div id="lyricer"></div>
+    <div id="lyricer">
+      <h1 class='text-5xl py-24 text-center animate-pulse text-white'>Loading..</h1>
+    </div>
   </div>
   <script defer>
-  lrc.setLrc(`$lrc`)
-  if(document.getElementById(lrc.divID))
-  lrc.move(appstate.getState('timeplayed'))
-    appstate.subscribe('timeplayed', (state)=>{
-    if(document.getElementById(lrc.divID))
-      lrc.move(state.getState('timeplayed'))
-    })
-    window.addEventListener('lyricerclick', function(e){
-        if (e.detail.time > 0&&e.detail.time!=undefined) {
-            appstate.setState('timeplayed', e.detail.time);
-            lrc.move(e.detail.time);
-        }
-    });
+    //  fetch("/lyrics/"+appstate.getState('ID'))
+    // .then(x => x.text())
+    // .then(y => alert(y));
+    // if(document.getElementById(lrc.divID))
+    //   lrc.move(appstate.getState('timeplayed'))
+    
+    // appstate.subscribe('timeplayed', (state)=>{
+    //   if(document.getElementById(lrc.divID))
+    //     lrc.move(state.getState('timeplayed'))
+    //   })
+    //   window.addEventListener('lyricerclick', function(e){
+    //     if (e.detail.time > 0&&e.detail.time!=undefined) {
+    //         appstate.setState('timeplayed', e.detail.time);
+    //         lrc.move(e.detail.time);
+    //     }
+    // });
   </script>
 #end def

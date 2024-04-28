@@ -20,7 +20,7 @@
         <img
           id="albumcover"
           class="lg:h-64 h-10 p-0 rounded hidden md:block"
-          src="$album['image'][2].url"
+          src="$album['image'][-1].url"
           alt="album cover Pic"
         />
       <div class="w-full p-8">

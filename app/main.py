@@ -147,19 +147,8 @@ async def artist_page(request, artistid):
     return response.html(
         env.render_template("artist", [{
                 "name": data["name"],
-                "image": data['image'][2]['link'],
+                "image": data['image'][2]['url'],
                 "biodata": """
-                @app.get("/artists/<artistid>") # todo: Fetch from user in DB. 
-                async def artist_page(request, artistid):
-                    # if not is_logged_in(request):
-                    #     return response.redirect("/login") # TODO: Flashes...
-                    
-                    data = requests.get(
-                        'https://saavn.me/artists?id='+artistid
-                    ).json()["data"]
-
-                    if data is None:
-                        return response.text("404")
                 """
 
             }], 
@@ -167,9 +156,9 @@ async def artist_page(request, artistid):
     )
 
 @app.get("/lyrics/<songid>")
-async def getlyrics(req,songid):
+async def getlyrics(req, songid):
     data = requests.get(
-        'https://saavn.dev/api/songs?id='+songid
+        'https://saavn.dev/api/songs/'+songid
     ).json()["data"][0]
 
     pprint.pprint(data)
@@ -177,10 +166,19 @@ async def getlyrics(req,songid):
     if not data:
         return response.html('404')
     
+    return response.text(
+            syncedlyrics.search(
+                data['name']+' '+','.join(list(
+                    map(lambda ar: ar['name'], data['artists']['primary'])
+                ))
+            )
+    )
+
+@app.get("/lyrics")
+async def lyrics(req):
+    
     return response.html(
-        env.render_template("lyrics", {
-            "lrc":syncedlyrics.search(data['name']+' '+data['primaryArtists'])
-        })
+        env.render_template('lyrics',{})
     )
 
 @app.exception(NotFound)
@@ -192,4 +190,4 @@ async def ignore_404s(request, exception):
 
 
 if __name__=="__main__":
-  app.run(host="0.0.0.0", port=8000, debug=True)
+  app.run(host="0.0.0.0", port=8000, debug=True,)

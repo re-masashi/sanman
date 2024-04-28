@@ -4,7 +4,8 @@ const playIcon = `<i class="material-icons">play_arrow</i>`;
 window.appstate = new State();
 
 let initPage = () =>{
-	appstate.condElemSubscribe('playing', {
+
+  appstate.condElemSubscribe('playing', {
 		elem: document.getElementById('playbutton'),
 		expression: (state)=>{
 			if (state.getState('playing'))
@@ -38,6 +39,33 @@ let initPage = () =>{
 			player.pause()
 		}
 	})
+
+  if(document.getElementById(lrc.divID)){
+    console.log(appstate.state)
+    
+    fetch("/lyrics/"+appstate.getState('ID'))
+    .then(x => x.text())
+    .then(y => {
+      lrc.setLrc(y)
+      lrc.move(appstate.getState('timeplayed'))
+    });
+
+    window.addEventListener('lyricerclick', function(e){
+      console.log("clikd lyrcs")
+      console.log(e)
+      if (e.detail.time > 0&&e.detail.time!=undefined) {
+          appstate.setState('timeplayed', e.detail.time);
+          document.getElementById("audio").currentTime = appstate.getState('timeplayed')
+
+          lrc.move(e.detail.time);
+      }
+    })
+
+    appstate.subscribe('timeplayed', (state)=>{
+      if(document.getElementById(lrc.divID))
+        lrc.move(state.getState('timeplayed'))
+    })
+  }
 }
 
 initPage()
@@ -152,6 +180,14 @@ let mediaSessionInit = ()=>{
     navigator.mediaSession.setActionHandler("nexttrack", () => {
       player.queueNext();
     });
+    appstate.condElemSubscribe('songname', {
+      elem: {},
+      cond: (state)=>{
+        navigator.mediaSession.metadata.songname=state.getState('songname')
+      }
+    })
+  }else{
+    console.log("no media session")
   }
 }
 
