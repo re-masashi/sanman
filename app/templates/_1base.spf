@@ -230,9 +230,9 @@
           <button class="font-thin p-1 pb-2" onclick="player.queueNext();" >
             <i class="material-icons">skip_next</i>
           </button>
-          <a class="font-thin p-1 pb-2" href="/lyrics">
+          <button class="font-thin p-1 pb-2" onclick="if(window.navigator.location.pathname=='/lyrics'||window.navigator.location.pathname=='/lyrics/'){Turbo.visit('/lyrics')}else{history.back()}">
             <i class="material-icons">lyrics</i>
-          </a>
+          </button>
         </div>
       </div>
     </div>
