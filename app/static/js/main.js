@@ -182,7 +182,7 @@ let mediaSessionInit = ()=>{
     });
     appstate.condElemSubscribe('songname', {
       elem: {},
-      cond: (state)=>{
+      expression: (state)=>{
         navigator.mediaSession.metadata.songname=state.getState('songname')
       }
     })
